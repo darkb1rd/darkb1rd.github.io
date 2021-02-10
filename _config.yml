@@ -9,7 +9,7 @@ description: '孤舟蓑笠翁，独钓寒江雪'
 keywords:
 author: darkb1rd
 language: zh-Hans
-timezone: ''
+timezone: 'Asia/Shanghai'
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://example.com/child' and root as '/child/'
