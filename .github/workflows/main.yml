@@ -28,13 +28,12 @@ jobs:
         npm install yuque-hexo -g
         npm install
         yuque-hexo sync
-        hexo bangumi -u
     - name: Clean files
       run: |
         hexo clean
         rm -rf ./public/
     - name: Generate files
-      run: hexo generate
+      run:  hexo g
 
     - name: Deploy blog
       run: |
