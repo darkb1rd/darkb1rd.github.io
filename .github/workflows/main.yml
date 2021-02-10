@@ -37,7 +37,7 @@ jobs:
         git config user.name "darkb1rd"
         git config user.email "da2kb1rd@gmail.com"
         git config user.password ${{ secrets.GH_PWD }}
-        git clone https://github.com/darkb1rd/blog.git deploy_git
+        git clone https://darkb1rd@github.com/darkb1rd/blog.git deploy_git
         mv ./deploy_git/.git ./public/
         cd ./public
         git add .
