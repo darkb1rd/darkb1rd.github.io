@@ -34,6 +34,8 @@ jobs:
 
     - name: Deploy blog
       run: |
+        git config --global --unset http.proxy 
+        git config --global --unset https.proxy
         git clone "https://darkb1rd:${{ secrets.GH_PWD }}@github.com/darkb1rd/blog.git" deploy_git
         mv ./deploy_git/.git ./public/
         cd ./public
