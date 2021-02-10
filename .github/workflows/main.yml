@@ -29,8 +29,10 @@ jobs:
         npm install
         yuque-hexo sync
         hexo bangumi -u
+    - name: clean files
+      run: hexo clean
     - name: Generate files
-      run: hexo clean && hexo generate
+      run: hexo generate
 
     - name: Deploy blog
       run: |
