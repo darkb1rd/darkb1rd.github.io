@@ -34,10 +34,10 @@ jobs:
 
     - name: Deploy blog
       run: |
-        git clone "https://darkbird:${{ secrets.GH_PWD }}@github.com/darkb1rd/blog.git" deploy_git
+        git clone "https://darkb1rd:${{ secrets.GH_PWD }}@github.com/darkb1rd/blog.git" deploy_git
         mv ./deploy_git/.git ./public/
         cd ./public
-        git config user.name "darkbird"
+        git config user.name "darkb1rd"
         git config user.email "da2kb1rd@gmail.com"
         git add .
         git commit -m "GitHub Actions Auto Builder at $(date +'%Y-%m-%d %H:%M:%S')"
