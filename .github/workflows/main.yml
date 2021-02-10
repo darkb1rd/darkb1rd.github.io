@@ -30,7 +30,7 @@ jobs:
         yuque-hexo sync
         hexo bangumi -u
     - name: Generate files
-      run: hexo generate
+      run: hexo clean && hexo generate
 
     - name: Deploy blog
       run: |
