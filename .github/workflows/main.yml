@@ -31,6 +31,7 @@ jobs:
     - name: Clean files
       run: |
         hexo clean
+        rm -f yuque.json
         rm -rf ./public/
     - name: Generate files
       run:  hexo g
