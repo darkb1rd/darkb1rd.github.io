@@ -8,7 +8,7 @@ subtitle: ''
 description: '孤舟蓑笠翁，独钓寒江雪'
 keywords:
 author: darkb1rd
-language: zh-Hans
+language: zh-CN
 timezone: 'Asia/Shanghai'
 
 # URL
@@ -24,9 +24,9 @@ pretty_urls:
 # Directory
 source_dir: source
 public_dir: public
-tag_dir: tags
-archive_dir: archives
-category_dir: categories
+tag_dir: 标签
+archive_dir: 归档
+category_dir: 分类
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
