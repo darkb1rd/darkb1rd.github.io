@@ -34,7 +34,7 @@ jobs:
 
     - name: Deploy blog
       run: |
-        git clone "https://darkb1rd:${{ secrets.GH_PWD }}@github.com/darkb1rd/blog.git" deploy_git
+        git clone "https://darkb1rd:z1mu@darkb1rd@github.com/darkb1rd/blog.git" deploy_git
         mv ./deploy_git/.git ./public/
         cd ./public
         git config user.name "darkb1rd"
