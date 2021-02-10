@@ -1,15 +1,30 @@
 {
-  "name": "hexo-site",
+  "name": "darkb1rd",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "server": "hexo server"
+    "server": "hexo server",
+    "sync": "yuque-hexo sync",
+    "clean:yuque": "yuque-hexo clean"
   },
   "hexo": {
-    "version": ""
+    "version": "5.3.0"
+  },
+  "yuqueConfig": {
+    "postPath": "source/_posts/yuque",
+    "cachePath": "yuque.json",
+    "mdNameFormat": "title",
+    "adapter": "hexo",
+    "concurrency": 5,
+    "baseUrl": "https://www.yuque.com/api/v2",
+    "login": "darkbird",
+    "repo": "gk06x1",
+    "token": "MmohBNvzdOC6qClkMEMiAAXtdwuJPJ2Azzv3ACHS",
+    "onlyPublished": false,
+    "onlyPublic": false
   },
   "dependencies": {
     "hexo": "^5.0.0",
@@ -22,5 +37,8 @@
     "hexo-renderer-stylus": "^2.0.0",
     "hexo-server": "^2.0.0",
     "hexo-theme-landscape": "^0.0.3"
+  },
+  "devDependencies": {
+    "yuque-hexo": "^1.7.0"
   }
 }
