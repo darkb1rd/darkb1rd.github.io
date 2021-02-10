@@ -131,6 +131,7 @@ menu_settings:
   badges: false
 
 
+
 # ---------------------------------------------------------------
 # Sidebar Settings
 # See: https://theme-next.org/docs/theme-settings/sidebar
@@ -995,3 +996,4 @@ vendors:
 css: css
 js: js
 images: images
+
