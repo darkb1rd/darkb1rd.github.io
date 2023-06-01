@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="项目地址：https:&#x2F;&#x2F;github.com&#x2F;darkb1rd&#x2F;DarkGld&#x2F; 项目基于https:&#x2F;&#x2F;github.com&#x2F;EddieIvan01&#x2F;gld项目二次开发，仅用于交流学习，禁止用于非法活动。 为什么写这个项目？ 在每年的大型多人运动中，钓鱼无疑是快速进入内网的一种手段。当我们批量发送同一个钓鱼木马时，目标上线时间不统一，一旦某个目标操作敏感，导致程序被标黑，其他目标很可能会同时掉">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速生成钓鱼木马">
+<meta property="og:url" content="http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/index.html">
+<meta property="og:site_name" content="Darkb1rd">
+<meta property="og:description" content="项目地址：https:&#x2F;&#x2F;github.com&#x2F;darkb1rd&#x2F;DarkGld&#x2F; 项目基于https:&#x2F;&#x2F;github.com&#x2F;EddieIvan01&#x2F;gld项目二次开发，仅用于交流学习，禁止用于非法活动。 为什么写这个项目？ 在每年的大型多人运动中，钓鱼无疑是快速进入内网的一种手段。当我们批量发送同一个钓鱼木马时，目标上线时间不统一，一旦某个目标操作敏感，导致程序被标黑，其他目标很可能会同时掉">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/2021-02-10-008eGmZEgy1gng60lqhtag31hc0u0u13.gif">
+<meta property="article:published_time" content="2021-02-10T06:12:49.000Z">
+<meta property="article:modified_time" content="2023-03-29T08:46:10.312Z">
+<meta property="article:author" content="darkb1rd">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/2021-02-10-008eGmZEgy1gng60lqhtag31hc0u0u13.gif">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>快速生成钓鱼木马</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<div class="bg-filter" ></div>
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&text=快速生成钓鱼木马"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&is_video=false&description=快速生成钓鱼木马"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=快速生成钓鱼木马&body=Check out this article: http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&name=快速生成钓鱼木马&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&t=快速生成钓鱼木马"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%86%99%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">为什么写这个项目？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%94%E7%A4%BA"><span class="toc-number">3.</span> <span class="toc-text">演示</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4" >
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        快速生成钓鱼木马
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">darkb1rd</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-02-10T06:12:49.000Z" itemprop="datePublished">2021-02-10</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/darkb1rd/DarkGld/">https://github.com/darkb1rd/DarkGld/</a></p>
+<p>项目基于<a target="_blank" rel="noopener" href="https://github.com/EddieIvan01/gld">https://github.com/EddieIvan01/gld</a>项目二次开发，<strong>仅用于交流学习，禁止用于非法活动。</strong></p>
+<h4 id="为什么写这个项目？"><a href="#为什么写这个项目？" class="headerlink" title="为什么写这个项目？"></a>为什么写这个项目？</h4><ol>
+<li>在每年的大型多人运动中，钓鱼无疑是快速进入内网的一种手段。当我们批量发送同一个钓鱼木马时，目标上线时间不统一，一旦某个目标操作敏感，导致程序被标黑，其他目标很可能会同时掉线。所以就萌生了写个程序快速生成钓鱼木马，从而在钓鱼的时候发送 hash 不同的木马。</li>
+<li>直接在 GitHub 上看到大佬的 GLd 项目，开源的项目，刚学习的 go，所以借助这个项目，练习了一下。</li>
+</ol>
+<h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><p>DarkGld 原理非常简单，就是在 Gld 的基础上，将手动编译的过程实现了自动化，从而提高效率。主要过程如下：</p>
+<ul>
+<li>根据是否添加图标判断是否通过 <code>rsrc -manifest main.exe.manifest -ico rc.ico -o rsrc.syso</code> 生成资源文件</li>
+<li>根据是否捆绑文件，生成不同的加载器模版。此处如果加载文件，文件会被转换成 base64 字符串插入到加载器模版。加载器再运行的时候会将 base64 字符串重新解码写入到系统环境变量 <code>temp</code> 目录下，写完后自动打开。</li>
+<li>根据选择的目标系统架构，在编译的时候设置编译出 <code>x64</code> 或 <code>x86</code> 的文件。</li>
+<li>判断是否需要 UAC 权限启动。如果选择 UAC，目标在点开文档的时候会弹出来 UAC 窗口，好处是回来的权限更大，缺点是现对而言更容易被察觉。不选择 UAC 的话，运行没有弹窗，相对而言更不易被察觉。两种模版都是从网上找的，程序中的模版如下：<ul>
+<li>需要 UAC</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> standalone=<span class="string">&quot;yes&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">assembly</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:schemas-microsoft-com:asm.v1&quot;</span> <span class="attr">manifestVersion</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">assemblyIdentity</span></span></span><br><span class="line"><span class="tag">    <span class="attr">version</span>=<span class="string">&quot;1.0.0.0&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">processorArchitecture</span>=<span class="string">&quot;x86&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">name</span>=<span class="string">&quot;controls&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">type</span>=<span class="string">&quot;win32&quot;</span></span></span><br><span class="line"><span class="tag">&gt;</span><span class="tag">&lt;/<span class="name">assemblyIdentity</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependentAssembly</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">assemblyIdentity</span></span></span><br><span class="line"><span class="tag">            <span class="attr">type</span>=<span class="string">&quot;win32&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">name</span>=<span class="string">&quot;Microsoft.Windows.Common-Controls&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">version</span>=<span class="string">&quot;6.0.0.0&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">processorArchitecture</span>=<span class="string">&quot;*&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">publicKeyToken</span>=<span class="string">&quot;6595b64144ccf1df&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">language</span>=<span class="string">&quot;*&quot;</span></span></span><br><span class="line"><span class="tag">        &gt;</span><span class="tag">&lt;/<span class="name">assemblyIdentity</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependentAssembly</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">trustInfo</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:schemas-microsoft-com:asm.v3&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">security</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">requestedPrivileges</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">requestedExecutionLevel</span> <span class="attr">level</span>=<span class="string">&quot;requireAdministrator&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">requestedPrivileges</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">security</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">trustInfo</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">assembly</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>不需要 UAC 的模版</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> standalone=<span class="string">&quot;yes&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">assembly</span> <span class="attr">xmlns</span>=<span class="string">&quot;urn:schemas-microsoft-com:asm.v1&quot;</span> <span class="attr">manifestVersion</span>=<span class="string">&quot;1.0&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">assemblyIdentity</span></span></span><br><span class="line"><span class="tag">    <span class="attr">version</span>=<span class="string">&quot;1.0.0.0&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">processorArchitecture</span>=<span class="string">&quot;x86&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">name</span>=<span class="string">&quot;controls&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">type</span>=<span class="string">&quot;win32&quot;</span></span></span><br><span class="line"><span class="tag">&gt;</span><span class="tag">&lt;/<span class="name">assemblyIdentity</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependentAssembly</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">assemblyIdentity</span></span></span><br><span class="line"><span class="tag">            <span class="attr">type</span>=<span class="string">&quot;win32&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">name</span>=<span class="string">&quot;Microsoft.Windows.Common-Controls&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">version</span>=<span class="string">&quot;6.0.0.0&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">processorArchitecture</span>=<span class="string">&quot;*&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">publicKeyToken</span>=<span class="string">&quot;6595b64144ccf1df&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">language</span>=<span class="string">&quot;*&quot;</span></span></span><br><span class="line"><span class="tag">        &gt;</span><span class="tag">&lt;/<span class="name">assemblyIdentity</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependentAssembly</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">assembly</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>根据是否进行虚拟机探测，判断是否插入虚拟机探测代码。无论是否进行虚拟机探测，都不会影响文档的正常打开。</li>
+</ul>
+<p>根据选项生成了模版后（由于 Gld 项目本身生成加载器的过程中每次使用的加密 key 都不同，所以相同命令生成的加载器也是不同的），通过使用 go 执行编译命令，编译出最终的加载器。</p>
+<p>go 编译命令解释如下：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">err = exec.Command(<span class="string">&quot;go&quot;</span>, <span class="string">&quot;build&quot;</span>, <span class="string">&quot;-o&quot;</span>, <span class="string">&quot;.\\&quot;</span> + OUTFILE , <span class="string">&quot;-ldflags&quot;</span>, <span class="string">&quot;-w -s -H=windowsgui&quot;</span>, <span class="string">&quot;-gcflags&quot;</span>, <span class="string">&quot;-trimpath=$GOPATH/src&quot;</span>, <span class="string">&quot;-asmflags&quot;</span>, <span class="string">&quot;-trimpath=$GOPATH/src&quot;</span>, <span class="string">&quot;.\\&quot;</span> + dir ).Run()</span><br><span class="line"></span><br><span class="line"><span class="comment">//-o .\filename.exe : 输出为指定文件</span></span><br><span class="line"><span class="comment">//-ldflags=&quot;-w -s -H=windowsgui&quot;  : 减小程序体积且编译为Windows窗口程序（双击运行不弹窗）</span></span><br><span class="line"><span class="comment">//-gcflags=&quot;-trimpath=$GOPATH/src&quot; -asmflags=&quot;-trimpath=$GOPATH/src&quot; : 编译时去除路径信息，如果编译时电脑的用户名是自己常用的ID，未去除路径信息可能会导致被通过路径信息进行定位。</span></span><br><span class="line"><span class="comment">//更详细的参数解释建议百度</span></span><br></pre></td></tr></table></figure>
+<p>编译完成后，会自动删除 <code>temp</code> 目录。</p>
+<h4 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h4><img src="/images/2021-02-10-008eGmZEgy1gng60lqhtag31hc0u0u13.gif" style="width: 600px"/>
+
+<p>以上即为 DarkGld 项目实现的逻辑，内置模版可能不免杀了，可根据内容自行调整。本文若有错误之处，敬请指出，以免误导他人。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%86%99%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">为什么写这个项目？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%94%E7%A4%BA"><span class="toc-number">3.</span> <span class="toc-text">演示</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&text=快速生成钓鱼木马"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&is_video=false&description=快速生成钓鱼木马"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=快速生成钓鱼木马&body=Check out this article: http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&title=快速生成钓鱼木马"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&name=快速生成钓鱼木马&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/02/10/%E7%A4%BE%E5%B7%A5%E9%92%93%E9%B1%BC/%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E9%92%93%E9%B1%BC%E6%9C%A8%E9%A9%AC/&t=快速生成钓鱼木马"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    darkb1rd
+  </div>
+<!--  <div class="footer-right">-->
+<!--    <nav>-->
+<!--      <ul>-->
+<!--        &lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/">首页</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/about/">关于</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/archives/">归档</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;-->
+<!--      </ul>-->
+<!--    </nav>-->
+<!--  </div>-->
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
