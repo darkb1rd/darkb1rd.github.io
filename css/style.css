@@ -1123,8 +1123,10 @@ article .content img,
 article .content video {
   display: block;
   margin: auto;
-  max-width: 100%;
+  max-width: 600px;
   height: auto;
+  box-shadow: 0 0 10px rgba(255,255,255,0.6);
+  border-radius: 4px;
 }
 article .content .video-container {
   position: relative;
