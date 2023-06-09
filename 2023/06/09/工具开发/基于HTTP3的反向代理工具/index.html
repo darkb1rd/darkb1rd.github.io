@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="一、HTTP3的相关知识​    HTTP3是第三个主要版本的HTTP协议。与其前任HTTP1.1和HTTP2不同，在HTTP3中，将弃用TCP协议，改为使用基于UDP协议的QUIC协议实现。 此变化主要为了解决HTTP&#x2F;2中存在的队头阻塞问题。修改包括：  在QUIC中，数据流由传输层本身提供，而在HTTP&#x2F;2中，流在HTTP层完成 由于数据流互相独立，如果仍使用HTTP&#x2F;2中使用的头部压缩算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于HTTP3的反向代理工具">
+<meta property="og:url" content="http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/index.html">
+<meta property="og:site_name" content="Darkb1rd">
+<meta property="og:description" content="一、HTTP3的相关知识​    HTTP3是第三个主要版本的HTTP协议。与其前任HTTP1.1和HTTP2不同，在HTTP3中，将弃用TCP协议，改为使用基于UDP协议的QUIC协议实现。 此变化主要为了解决HTTP&#x2F;2中存在的队头阻塞问题。修改包括：  在QUIC中，数据流由传输层本身提供，而在HTTP&#x2F;2中，流在HTTP层完成 由于数据流互相独立，如果仍使用HTTP&#x2F;2中使用的头部压缩算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://v28nhb.oss-cn-hangzhou.aliyuncs.com/2023-06/1686100653488.png">
+<meta property="og:image" content="http://v28nhb.oss-cn-hangzhou.aliyuncs.com/2023-06/1686296829433.png">
+<meta property="article:published_time" content="2023-06-09T08:04:40.000Z">
+<meta property="article:modified_time" content="2023-06-09T08:04:27.026Z">
+<meta property="article:author" content="darkb1rd">
+<meta property="article:tag" content="工具开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://v28nhb.oss-cn-hangzhou.aliyuncs.com/2023-06/1686100653488.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>基于HTTP3的反向代理工具</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<div class="bg-filter" ></div>
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/06/06/%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/%E6%9F%90PHP%20CTF%E9%A2%98%E7%9B%AE%E5%AD%A6%E4%B9%A0/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&text=基于HTTP3的反向代理工具"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&is_video=false&description=基于HTTP3的反向代理工具"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基于HTTP3的反向代理工具&body=Check out this article: http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&name=基于HTTP3的反向代理工具&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&t=基于HTTP3的反向代理工具"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81HTTP3%E7%9A%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">一、HTTP3的相关知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%94%B9%E9%80%A0"><span class="toc-number">2.</span> <span class="toc-text">二、改造</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4" >
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        基于HTTP3的反向代理工具
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">darkb1rd</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-06-09T08:04:40.000Z" itemprop="datePublished">2023-06-09</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/">工具开发</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/" rel="tag">工具开发</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="一、HTTP3的相关知识"><a href="#一、HTTP3的相关知识" class="headerlink" title="一、HTTP3的相关知识"></a>一、HTTP3的相关知识</h1><p>​    <code>HTTP3</code>是第三个主要版本的HTTP协议。与其前任<code>HTTP1.1</code>和<code>HTTP2</code>不同，在<code>HTTP3</code>中，<strong>将弃用TCP协议，改为使用基于UDP协议的QUIC协议实现。 此变化主要为了解决HTTP/2中存在的队头阻塞问题</strong>。修改包括：</p>
+<ul>
+<li>在QUIC中，数据流由传输层本身提供，而在HTTP/2中，流在HTTP层完成</li>
+<li>由于数据流互相独立，如果仍使用HTTP/2中使用的头部压缩算法，会造成队头阻塞</li>
+<li>QUIC流与HTTP/2略有不同</li>
+</ul>
+<p>​    <strong>HTTP3与HTTP2的比较：</strong> </p>
+<ul>
+<li>两者都提供数据流</li>
+<li>两者都提供服务器推送</li>
+<li>两者都有头部压缩，QPACK与HPACK的设计非常类似</li>
+<li>两者都通过单一连接上的数据流提供复用</li>
+<li>两者都提供数据流的优先度设置</li>
+<li>得益于QUIC的0-RTT握手，HTTP/3可以提供更好的早期数据支持，而TCP快速打开和TLS通常只能传输更少的数据，且经常存在问题。</li>
+<li>得益于QUIC，HTTP/3的握手速度比TCP+TLS快得多</li>
+<li>HTTP/3不存在明文的不安全版本。尽管在互联网上很少见，HTTP/2还是可以不配合HTTPS来实现和使用</li>
+<li>通过ALPN拓展，HTTP/2可以直接在TLS握手时进行协商。HTTP/3基于QUIC，所以需要凭借响应中的 Alt-Svc: 头部来向客户端宣告</li>
+</ul>
+<p>​    QUIC一如既往是安全的，它没有明文版本，想要建立一个QUIC连接，就必须通过TLS 1.3来进行加密保证安全。如上文所说，加密可以避免协议僵化等拦截和特殊处理。这也使QUIC具有了Web用户所期望的所有HTTPS安全特性。</p>
+<p>​    QUIC在加密协商前，只有很少的初始握手报文会以明文形式发送。</p>
+<p>​    QUIC只需要0-RTT或1-RTT的握手，可以减少协商和建立新连接所需的时间。</p>
+<p>​    </p>
+<p>​    当然，上述都是网上搜索到的介绍。对于具体实现，可以先看一下有没有现成的工具。在GitHub找了一下，发现了<a target="_blank" rel="noopener" href="https://github.com/esrrhs/spp">https://github.com/esrrhs/spp</a> 支持通过 quic 创建反向socks5代理。</p>
+<p>​    <img src="http://v28nhb.oss-cn-hangzhou.aliyuncs.com/2023-06/1686100653488.png" alt="1686100653488.png"></p>
+<blockquote>
+<p>后面发现frp也支持quic协议，不过frp功能太多了，就不打算动它了。</p>
+</blockquote>
+<p>​    </p>
+<h1 id="二、改造"><a href="#二、改造" class="headerlink" title="二、改造"></a>二、改造</h1><p>​    针对现有工具进行改造，避免重复造轮子。此次采用的项目为：<a target="_blank" rel="noopener" href="https://github.com/esrrhs/spp">https://github.com/esrrhs/spp</a> 。该项目很多代码是位于作者的另外一个项目：<a target="_blank" rel="noopener" href="https://github.com/esrrhs/gohome">https://github.com/esrrhs/gohome</a> 。为了方便改造，建议把这个项目也下载到本地。</p>
+<p>​    <strong>目的：</strong> 针对攻防场景。减小体积、简化操作。</p>
+<ol>
+<li><p>分离服务端与客户端，这块其实很好做，因为原项目其实已经分开了。我们只需要分开单独编译即可。</p>
+<p>参考frp创建目录如下：</p>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">├── cmd</span><br><span class="line">│   ├── client</span><br><span class="line">│   │   ├── <span class="selector-tag">main</span><span class="selector-class">.go</span></span><br><span class="line">│   │   └── <span class="selector-tag">main</span><span class="selector-class">.go</span><span class="selector-class">.example</span></span><br><span class="line">│   └── server</span><br><span class="line">│       ├── <span class="selector-tag">main</span><span class="selector-class">.go</span></span><br><span class="line">│       └── <span class="selector-tag">main</span><span class="selector-class">.go</span>.example</span><br></pre></td></tr></table></figure>
+<p>其中，<code>*.example</code> 为初始模板，方便后续生成加密后的配置所用。</p>
+</li>
+<li><p>去除无用log，特别是客户端的，虽然原项目已经提供了参数可关闭日志，但是在保证程序可以正常运行的情况下，还是建议去除日志输出。</p>
+<p>去除默认的log输出，即能减小客户端的体积，又可以避免在控制台输出大量内容，影响后续的攻击流程（想象一下执行了代理程序后，疯狂在beacon中输出日志的场景）</p>
+<p>服务端日志示例：</p>
+<figure class="highlight clean"><table><tr><td class="code"><pre><span class="line">[root@VM<span class="number">-8</span><span class="number">-2</span>-centos sppq]# ./spp</span><br><span class="line">[*] Listening on :<span class="number">8443</span></span><br><span class="line">[*] New Client: <span class="number">10.0</span><span class="number">.8</span><span class="number">.2</span>:<span class="number">8443</span>&lt;--quic--&gt;<span class="number">1.1</span><span class="number">.1</span><span class="number">.1</span>:<span class="number">56751</span></span><br><span class="line">[+] processLogin <span class="number">10.0</span><span class="number">.8</span><span class="number">.2</span>:<span class="number">8443</span>&lt;--quic--&gt;<span class="number">1.1</span><span class="number">.1</span><span class="number">.1</span>:<span class="number">56751</span> clienttype:REVERSE_SOCKS5 fromaddr:<span class="string">&quot;:27766&quot;</span> name:<span class="string">&quot;windows10_20.0.22.188_10.37.132.102_169.254.241.98__1686293349020817000_0&quot;</span> key:<span class="string">&quot;aOyItVTVJssgMhoo&quot;</span></span><br></pre></td></tr></table></figure>
+<p>客户端日志示例：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">➜ ./spp</span><br><span class="line"><span class="string">[+]</span> Port :<span class="number">13092</span></span><br></pre></td></tr></table></figure>
+<p>这样，我们只需要知道服务端开启的<code>socks5</code> 端口是多少即可。</p>
+</li>
+<li><p>对基础配置进行加密，这一步其实主要是给分析增加一点点难度，因为如果被捕获了客户端，其中的配置很容易被发现的。</p>
+<p>对于配置，可以将需要加密的配置进行转字符串，然后通过动态key加密。参考如下：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line"></span><br><span class="line">	encryptData := <span class="string">`lJUrJPxSVsgRb7laXKBp0nQU1aT5wlmuhZtrdW5mHPU31VSBr8HMON/cUZgrk194lHIu4CzSzBcZIsfMKtRO1lgrY/hP7kQ8Vtb67lqTsxtBHEcY/v9MC96idAww3DhTFN7M3ICyGzIbzhyhYMFxnA==`</span></span><br><span class="line">	decryptData := utils.Decrypt(encryptData, <span class="string">&quot;aiLauyuPZVBDvaWX&quot;</span>)</span><br><span class="line">	<span class="keyword">var</span> c Conf</span><br><span class="line">	err := json.Unmarshal([]<span class="type">byte</span>(decryptData), &amp;c)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;[-] error: %s \n&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	config := proxy.DefaultConfig()</span><br><span class="line">	config.MaxTryCon = c.MaxTry</span><br><span class="line">	config.Key = c.ConnectKey</span><br><span class="line">	config.Encrypt = c.EncryptKey</span><br><span class="line">	name := GetName()</span><br><span class="line"></span><br><span class="line">	fromaddr := <span class="string">&quot;:&quot;</span> + randPort()</span><br><span class="line">	fmt.Printf(<span class="string">&quot;[+] Port %s\n&quot;</span>, fromaddr)</span><br><span class="line">	_, err = proxy.NewClient(config, <span class="string">&quot;quic&quot;</span>, c.Server, name, <span class="string">&quot;reverse_socks5&quot;</span>, <span class="string">&quot;tcp&quot;</span>, fromaddr, <span class="string">&quot;&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;[-] Connect server error: %s\n&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		time.Sleep(time.Second * <span class="number">10</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>对于工具的优化，还建议不同使用场景，进行不同的配置。同时结合GitHub，进行版本更新编译。</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># This is an example .goreleaser.yml file with some sensible defaults.</span></span><br><span class="line"><span class="comment"># Make sure to check the documentation at https://goreleaser.com</span></span><br><span class="line"><span class="attr">before:</span></span><br><span class="line">  <span class="attr">hooks:</span></span><br><span class="line">    <span class="comment"># You may remove this if you don&#x27;t use go modules.</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">go</span> <span class="string">mod</span> <span class="string">tidy</span></span><br><span class="line">    <span class="comment"># you may remove this if you don&#x27;t need go generate</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">go</span> <span class="string">generate</span> <span class="string">./...</span></span><br><span class="line"><span class="comment"># .goreleaser.yaml</span></span><br><span class="line"><span class="attr">builds:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">main:</span> <span class="string">cmd/client/main.go</span></span><br><span class="line">    <span class="attr">id:</span> <span class="string">&quot;spp&quot;</span></span><br><span class="line">    <span class="attr">binary:</span> <span class="string">sppc</span></span><br><span class="line">    <span class="attr">goos:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">linux</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">darwin</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">windows</span></span><br><span class="line">    <span class="attr">goarch:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">amd64</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">386</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">CGO_ENABLED=0</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">main:</span> <span class="string">cmd/server/main.go</span></span><br><span class="line">    <span class="attr">id:</span> <span class="string">&quot;spp&quot;</span></span><br><span class="line">    <span class="attr">binary:</span> <span class="string">spps</span></span><br><span class="line">    <span class="attr">goos:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">linux</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">darwin</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">windows</span></span><br><span class="line">    <span class="attr">goarch:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">amd64</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">386</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">CGO_ENABLED=0</span></span><br><span class="line"><span class="attr">archives:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">replacements:</span></span><br><span class="line">      <span class="attr">darwin:</span> <span class="string">Darwin</span></span><br><span class="line">      <span class="attr">linux:</span> <span class="string">Linux</span></span><br><span class="line">      <span class="attr">windows:</span> <span class="string">Windows</span></span><br><span class="line">      <span class="attr">386:</span> <span class="string">i386</span></span><br><span class="line">      <span class="attr">amd64:</span> <span class="string">amd64</span></span><br><span class="line">    <span class="attr">name_template:</span> <span class="string">&quot;spp_<span class="template-variable">&#123;&#123; .Version &#125;&#125;</span>_<span class="template-variable">&#123;&#123; .Os &#125;&#125;</span>_<span class="template-variable">&#123;&#123; .Arch &#125;&#125;</span>&quot;</span></span><br><span class="line"><span class="attr">checksum:</span></span><br><span class="line">  <span class="attr">name_template:</span> <span class="string">&#x27;checksums.txt&#x27;</span></span><br><span class="line"><span class="attr">snapshot:</span></span><br><span class="line">  <span class="attr">name_template:</span> <span class="string">&quot;<span class="template-variable">&#123;&#123;  .Version &#125;&#125;</span>-next&quot;</span></span><br><span class="line"><span class="attr">changelog:</span></span><br><span class="line">  <span class="attr">sort:</span> <span class="string">asc</span></span><br><span class="line">  <span class="attr">filters:</span></span><br><span class="line">    <span class="attr">exclude:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;^docs:&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;^test:&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+<p>​    综上所述，我们可以将工具改成如下使用流程：</p>
+<ol>
+<li>首先运行<code>go run general.go</code> ,进行简单的配置。</li>
+</ol>
+<p><img src="http://v28nhb.oss-cn-hangzhou.aliyuncs.com/2023-06/1686296829433.png" alt="1686296829433.png"></p>
+<ol start="2">
+<li><p>通过git 上传到GitHub 并编译。命令参考如下:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git add .</span><br><span class="line"></span><br><span class="line">git commit -m &quot;提交信息&quot;</span><br><span class="line"></span><br><span class="line">git push origin main</span><br><span class="line"></span><br><span class="line">git tag v0.0.1</span><br></pre></td></tr></table></figure></li>
+<li><p>服务端启动服务端程序，客户端直接运行<code>./spp</code> 即可。</p>
+</li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://hungryturbo.com/HTTP3-explained/quic/HTTP3.html">https://hungryturbo.com/HTTP3-explained/quic/HTTP3.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-cn/HTTP/3">https://zh.wikipedia.org/zh-cn/HTTP/3</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/esrrhs/spp">https://github.com/esrrhs/spp</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81HTTP3%E7%9A%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">一、HTTP3的相关知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%94%B9%E9%80%A0"><span class="toc-number">2.</span> <span class="toc-text">二、改造</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">3.</span> <span class="toc-text">参考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&text=基于HTTP3的反向代理工具"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&is_video=false&description=基于HTTP3的反向代理工具"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=基于HTTP3的反向代理工具&body=Check out this article: http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&title=基于HTTP3的反向代理工具"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&name=基于HTTP3的反向代理工具&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/&t=基于HTTP3的反向代理工具"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    darkb1rd
+  </div>
+<!--  <div class="footer-right">-->
+<!--    <nav>-->
+<!--      <ul>-->
+<!--        &lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/">首页</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/about/">关于</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/archives/">归档</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;-->
+<!--      </ul>-->
+<!--    </nav>-->
+<!--  </div>-->
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
