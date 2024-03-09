@@ -576,8 +576,9 @@ body {
   }
 }
 .max-width {
-  backdrop-filter: blur(8px);
-  border-radius: 4px;
+  backdrop-filter: blur(80px);
+  border-radius: 6px;
+  width: 65%;
 }
 @media (max-width: 480px) {
   .px3 {
